@@ -1,0 +1,72 @@
+module flasher (
+    input clk,              // 100MHz clock
+    //input rst_n,            // reset button (active low)
+    output led[10] // output for leds 0-9
+
+  ) {
+
+  alu alu;
+  sig rst;                  // reset signal
+  
+  .clk(clk) {
+    // The reset conditioner is used to synchronize the reset signal to the FPGA
+    // clock. This ensures the entire FPGA comes out of reset at the same time.
+    fsm state = {PLAYLEFT,PLAYRIGHT};
+    dff aVal[16];
+    dff bVal[16];
+    .rst(rst){
+    delayer delayer;
+  } 
+    
+  }
+  sig a[16],b[16];
+  sig alufn[6];  
+  always {
+
+    
+    a=0;
+    b=0;
+    alu.a=a;
+    alu.b=b;
+    alufn = 6b100000;// shift left
+    alu.alufn = alufn;
+    led = alu.alu[9:0];
+    case(state.q){
+            
+      state.PLAYLEFT:
+        
+        bVal.d = delayer.value; // bval becomes a 4 bit number
+        if(bVal.q!=20){       
+          alufn = 6b100000; // shl
+          aVal.d=1;
+          alu.a = aVal.q;  
+          alu.b = bVal.q;
+          alu.alufn = alufn;
+          led = alu.alu[9:0];
+          
+          //starts shifting right
+          if(bVal.q==10) {
+            state.d = state.PLAYRIGHT;
+          }
+
+          
+        }
+        
+        
+      state.PLAYRIGHT:
+        bVal.d = delayer.value;    
+        b= bVal.q;
+       // a now starts at 9 and shifts right
+        alu.a = 9b100000000;
+        // b supposed to start at 0 again
+        alu.b = bVal.q-10;
+        //alufn = 6b100001;        
+        alu.alufn = 6b100001;
+        led = alu.alu[9:0];
+        //starts at 9 initially
+        //might need to be 10
+        if(bVal.q==20) {
+          state.d = state.PLAYLEFT;
+        }       
+    } 
+}

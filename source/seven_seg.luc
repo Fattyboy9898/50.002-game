@@ -1,0 +1,35 @@
+// We manually define how a segment is lit with a 7 bit binary. Each position represents 1/7 
+
+module seven_seg (
+    input char[16], // 16 possibilities. Coincidentally matches the base-16. 
+    output segs[7]
+  ) {
+
+  always {
+    case (char) {
+      0: segs = 7b0111111; // 0
+      1: segs = 7b0000110; //1
+      2: segs = 7b1011011; //2
+      3: segs = 7b1001111; //3
+      4: segs = 7b1100110; //4
+      5: segs = 7b1101101; //5  
+      6: segs = 7b1111101; //6
+      7: segs = 7b0000111;//7
+      8: segs = 7b1111111;//8
+      9: segs = 7b1100111;//9
+      10: segs =7b0111110; // U
+      //10: segs = 7b1110110; //H
+      11: segs = 7b1111001; //E
+      //12: segs = 7b0111000; //L
+      //13: segs = 7b1101110; //Y
+      12: segs = 7b1110111; // A
+      //15: segs = 7b0110111; //n
+      13: segs = 7b1110001; // F
+      14: segs = 7b1111100; // b
+      15: segs = 7b1011000; // lower c
+      //16: segs = 7b1110011; //letter p    
+      //21: segs = 7b1101101; //s
+      default: segs = 7b0000000;
+    }
+  }
+}

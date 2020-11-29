@@ -1,0 +1,79 @@
+module game_beta (
+    input clk,  // clock
+    input rst,  // reset
+    output out,
+
+    
+    input p1_button,
+    input p2_button,
+
+    
+    output p1_out[16],
+    output p2_out[16],
+
+  ) 
+
+
+{
+  
+    //temp variables
+  sig inputAlu_a[16];
+  sig inputAlu_b[16];
+
+  alu game_alu;
+  
+  .clk(clk){
+      .rst(rst){
+        game_cu game_controlUnit;
+        game_regfiles game_regFile;
+      
+        counter easy_timer();
+        counter medium_timer();
+        counter hard_timer();
+        counter timer();
+    }
+  }
+
+  always {
+    out = 0;
+    inputAlu_a=0;
+    inputAlu_b=0;
+    //alu
+    game_alu.a = inputAlu_a;
+    game_alu.b = inputAlu_b;
+    game_alu.alufn = game_controlUnit.alufn;
+    
+    //setup  regfile unit
+    game_regFile.we = game_controlUnit.we;
+    game_regFile.ra = game_controlUnit.ra;
+    game_regFile.rb = game_controlUnit.rb;
+    game_regFile.rc = game_controlUnit.rc;
+    
+    //asel mux
+    case(game_controlUnit.asel){
+      b00 : inputAlu_a = game_regFile.out_a; // reg file data
+      b01 : inputAlu_a = h0;
+      b10 : inputAlu_a = h1;
+      b01 : inputAlu_a = h2;
+    }
+    //bsel mux
+    case(game_controlUnit.bsel) {
+      b000 : inputAlu_b = game_regFile.out_b;
+      b001 : inputAlu_b = ha;
+      b010 : inputAlu_b = h14;
+      b011 : inputAlu_b = h1e;
+      b100 : inputAlu_b = h200;
+      b101 : inputAlu_b = h5;
+      b110 : inputAlu_b = h63;
+      b111 : inputAlu_b = h0;
+    }
+    //wdsel
+    case(game_controlUnit.alufn_sel) {
+      b00 : game_regFile.data= game_alu.alu;
+      b01 : game_regFile.data = 0;//rng data 
+      b10 : game_regFile.data = h3c;
+      b11 : game_regFile.data = h0;
+      default: game_regFile.data = game_alu.alu;
+    }
+  }
+}

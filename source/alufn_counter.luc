@@ -1,0 +1,28 @@
+module alufn_counter (
+    input count[4],  // 4-bit input from slowCount value
+    output alufn[6]  // 6-bit ALUFN output
+  ) {
+
+  always {
+    case(count) {
+      b0000: alufn = 6b000000;    // ADD
+      b0001: alufn = 6b000001;    // SUB
+      b0010: alufn = 6b000010;    // MUL
+      b0100: alufn = 6b000100;    // DIV
+      b1000: alufn = 6b001000;    // NEG
+      b0011: alufn = 6b011000;    // AND
+      b0100: alufn = 6b010111;    // NAND
+      b0101: alufn = 6b011110;    // OR
+      b0110: alufn = 6b010110;    // XOR
+      b0111: alufn = 6b011010;    // A
+      b1000: alufn = 6b011100;    // B
+      b1001: alufn = 6b100000;    // SHL
+      b1010: alufn = 6b100001;    // SHR
+      b1011: alufn = 6b100011;    // SRA
+      b1100: alufn = 6b110101;    // A = B (SUB)
+      b1101: alufn = 6b111001;    // A < B (SUB)
+      b1111: alufn = 6b111101;    // A <= B (SUB)
+      default: alufn = 6b0;       // default
+    }
+  }
+}

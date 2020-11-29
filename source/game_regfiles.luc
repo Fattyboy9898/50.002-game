@@ -1,0 +1,45 @@
+module game_regfiles (
+    input clk,  // clock
+    input rst,  // reset
+    input ra,
+    input rb,
+    input rc,
+    input we,
+    input data[16],
+    output out_a[16], // port a output
+    output out_b[16]
+  ) {
+  
+  .clk(clk){
+    .rst(rst){
+      dff operand1[16];
+      dff operand2[16];
+      dff timer[16];
+      dff level[16];
+      dff expectedAns[16];
+      dff moduloAns[16];
+      dff st_easy[16];
+      dff st_medium[16];
+      dff st_hard[16];
+      dff direction[16];
+      dff score[16];
+      dff ledvalue[16];
+    }
+  }
+
+  always {
+    out = 0;
+    
+    if (we) {
+      case(write_address){
+        b000:    
+      }
+    }
+    
+    
+    
+    
+  }
+  
+  
+}

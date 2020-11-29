@@ -1,0 +1,21 @@
+module shiftersixteen (
+    input a[16],      // 16-bit input A
+    input b[4],       // 0-3 bits input B
+    input alufn[2],   // first two alufn bits out of the 6-bit input ALUFN
+    output shift[16]  // 16-bit output SHIFTER
+  ) {
+
+  always {
+    // LOOKS AT THE ALUFN[1:0] OF THE 6 BIT ALUFN TO CHOOSE WHICH SHIFTING FUNCTION
+    case(alufn) {
+    
+      b00: shift = a << b;            // SHL SHIFTS LEFT BY USING THE LAST 4 BITS OF B
+      
+      b01: shift = a >> b;            // SHR SHIFTS RIGHT BY USING THE LAST 4 BITS OF B
+      
+      b11: shift = $signed(a) >>> b;  // SRA SHIFTS RIGHT BY SIGN EXTENSION USING THE LAST 4 BITS OF B
+      
+      default: shift = 16b0;          
+    }
+  }
+}

@@ -1,0 +1,30 @@
+module comparesixteen (
+    input z,         // input z
+    input v,         // input v
+    input n,         // input n
+    input alufn[2],  // 2-bit input ALUFN
+    output compare[16]   // 16-bit output of the compare unit
+  ) {
+
+  always {                        // alufn[1:0] always set to 01 (a - b) 
+    compare[15:1] = 15b0;             // high order 15 bits of the output are always zero
+    //LSB VALUE IS CHANGED
+    
+    //LSB IS CHANGED ACCORDING TO THE FUNCTION EITHER BECOMES
+    //Z , N XOR V
+    // OR Z OR ( N XOR V)
+    
+    case(alufn) {
+      // A = B 
+      b01: compare[0] = z;
+      
+      // A LESS THAN B
+      b10: compare[0] = n ^ v; 
+      
+      // A LESS THEN EQUALS B
+      b11: compare[0] = z | (n ^ v);  
+      
+      default: compare[0] = b0;       
+      }
+  }
+}

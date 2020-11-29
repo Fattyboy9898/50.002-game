@@ -1,0 +1,18 @@
+module delayer (
+    input clk,  // clock
+    input rst,  // reset   
+    output value[5] // can have 32 combis
+  ) {
+  
+  .clk(clk), .rst(rst) {
+    dff flip[23];
+  }
+  
+  customCounter ctr(.rst(rst));
+
+  always {
+    ctr.clk = flip.q[22];
+    flip.d = flip.q + 1;
+    value = ctr.value;
+  }
+}

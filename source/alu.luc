@@ -1,0 +1,49 @@
+module alu (
+    input a[16],     //16-bit for input A
+    input b[16],     //16-bit for input B
+    input alufn[6],  //6-bit for input ALUFN[5:0] 
+    output alu[16],  //16 bit for output ALU
+    output z,
+    output v,
+    output n
+  ) {
+  
+  fasixteen adder;           //FULLADDER16 module (includes multiplier) 
+  comparesixteen compare;    //COMPARE16 module
+  shiftersixteen shifter;    //SHIFTER16 module 
+  boolesixteen boole;        //BOOLE16 module 
+
+  always {
+  //creating inputs for each modules
+    adder.a = a;                        // to connect input A to the FULLADDER16 Module 
+    adder.b = b;                        // to connect input B to the FULLADDER16 Module
+    adder.alufn = alufn[3:0];            // to connect ALUFN[1:0] to the FULLADDER16 Module (selects ADD, SUB or MULT)
+    
+    compare.z = adder.z;                // to connect FULLADDER16 output Z to COMPARE16 input Z 
+    compare.v = adder.v;                // to connect FULLADDER16 output Z to COMPARE16 input V
+    compare.n = adder.n;                // to connect FULLADDER16 output Z to COMPARE16 input N 
+    compare.alufn = alufn[2:1];         // to connect ALUFN[2:1] to COMPARE16 Module 
+    
+    shifter.a =a;                       // to connect input A to SHIFTER16 Module
+    shifter.b = b[3:0];                 // to connect input B to SHIFTER16 Module
+    shifter.alufn = alufn[1:0];         // to connect ALUFN[1:0] to SHIFTER16 Module (selects SL, SR or SRA)
+    
+    boole.a = a;                        // to connect input A to BOOLE16 Module
+    boole.b = b;                        // to connect input B to BOOLE16 Module
+    boole.alufn = alufn[3:0];           // to connect ALUFN[3:0] to BOOLE16 Module 
+    
+    //establishing the diffferent cases in which modules will be selected by ALUFN inputs
+    case(alufn[5:4]) {
+      b00: alu = adder.s;               //if ALUFN = 00, select FULLADDER16 Module
+      b01: alu = boole.boole;           //if ALUFN = 01, select BOOLE16 Module
+      b10: alu = shifter.shift;       //if ALUFN = 10, select SHIFTER16 Module
+      b11: alu = compare.compare;       //if ALUFN = 11, select COMPARE16 Module
+      default: alu = 16b0;               // the default ALU value to be all 0s
+    }
+    
+    z = adder.z; //connecting z of the adder to z output
+    v = adder.v; //connecting v of adder to v output
+    n = adder.n;  //connecting n of adder to n output
+    
+  }
+}

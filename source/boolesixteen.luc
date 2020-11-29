@@ -1,0 +1,37 @@
+module boolesixteen (
+    input alufn[4], // ALUFN SIGNAL OF THE FIRST 4 BITS OUT OF THE 6 BIT ALUFN
+    input a[16],
+    input b[16],
+    output boole[16] // OUTPUT OF BOOLEAN UNIT 
+  ) {
+  always {
+  
+          // LOOKS AT THE FIRST 4 BITS OF ALUFN 
+           
+          case(alufn) {
+          
+        // AND FUNCTION
+        b1000: boole = a & b;       
+        
+        // OR FUNCTION
+        b1110: boole = a | b;     
+        
+        // XOR FUNCTION
+        b0110: boole = a ^ b;       
+        
+        // "A" FUNCTION
+        b1010: boole = a;       
+        
+        // NAND FUNCTION
+        b0111: boole = ~(a & b);  
+        
+        // NOR FUNCTION 
+        b0001: boole = ~ (a | b);  
+        
+        // XNOR FUNCTION 
+        b1001: boole = ~ ( a ^ b);  
+
+        default: boole = 16b0;
+      }
+  }
+}
