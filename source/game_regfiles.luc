@@ -9,7 +9,7 @@ module game_regfiles (
     input data[16],
     output out_a[16], // port a output
     output out_b[16], // port b output
-    output out_o[16]; // port o output
+    output out_o[6] // port o output
   ) {
   
   .clk(clk){
@@ -101,8 +101,25 @@ module game_regfiles (
         default : out_b = 0;
     }
     
-    case( read_address_o){
-        h2 : out_o= operation_level.q;
+    //read port o
+    case(read_address_o){
+        h0 : out_o=operand1.q;
+        h1 : out_o=operand2.q;
+        h2 : out_o=operation_level.q;
+        h3 : out_o=expectedAns.q;
+        h4 : out_o=moduloAns.q;
+        h5 : out_o=score.q;
+        h6 : out_o=countdown_timer.q;
+        h7 : out_o=direction.q;
+        h8 : out_o=ledvalue.q;
+        h9 : out_o=score_timer.q;
+        ha : out_o=temp1.q;
+        hb : out_o=temp2.q;
+        hc : out_o=temp3.q; 
+        hd : out_o=temp4.q;
+        he : out_o=temp5.q;
+        hf : out_o=temp6.q;
+        default : out_o = 0;
       
     }
     

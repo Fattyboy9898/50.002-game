@@ -4,7 +4,7 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module fasixteen_5 (
+module fasixteen_14 (
     input [15:0] a,
     input [15:0] b,
     input [3:0] alufn,
@@ -50,10 +50,26 @@ module fasixteen_5 (
         end
       end
       1'h1: begin
-        out = a - b;
-        z = (~|out);
-        v = (((a[15+0-:1]) & (~b[15+0-:1]) & (~out[15+0-:1])) | ((~a[15+0-:1]) & (b[15+0-:1]) & (out[15+0-:1])));
-        n = out[15+0-:1];
+        if (alufn[1+0-:1] == 1'h0) begin
+          out = a - b;
+          z = (~|out);
+          v = (((a[15+0-:1]) & (~b[15+0-:1]) & (~out[15+0-:1])) | ((~a[15+0-:1]) & (b[15+0-:1]) & (out[15+0-:1])));
+          n = out[15+0-:1];
+        end else begin
+          if (alufn[1+0-:1] == 1'h1) begin
+            if (b != 1'h0) begin
+              out = a - ((a / b) * b);
+              z = (~|out);
+              v = (((a[15+0-:1]) & (~b[15+0-:1]) & (~out[15+0-:1])) | ((~a[15+0-:1]) & (b[15+0-:1]) & (out[15+0-:1])));
+              n = out[15+0-:1];
+            end else begin
+              out = a;
+              z = (~|out);
+              v = (((a[15+0-:1]) & (~b[15+0-:1]) & (~out[15+0-:1])) | ((~a[15+0-:1]) & (b[15+0-:1]) & (out[15+0-:1])));
+              n = out[15+0-:1];
+            end
+          end
+        end
       end
       default: begin
         out = 16'h0000;
@@ -62,6 +78,19 @@ module fasixteen_5 (
         n = 1'h0;
       end
     endcase
+    if (alufn[0+1-:2] == 2'h3) begin
+      if (b != 1'h0) begin
+        out = a - ((a / b) * b);
+        z = (~|out);
+        v = (((a[15+0-:1]) & (~b[15+0-:1]) & (~out[15+0-:1])) | ((~a[15+0-:1]) & (b[15+0-:1]) & (out[15+0-:1])));
+        n = out[15+0-:1];
+      end else begin
+        out = a;
+        z = (~|out);
+        v = (((a[15+0-:1]) & (~b[15+0-:1]) & (~out[15+0-:1])) | ((~a[15+0-:1]) & (b[15+0-:1]) & (out[15+0-:1])));
+        n = out[15+0-:1];
+      end
+    end
     s = out[0+15-:16];
   end
 endmodule

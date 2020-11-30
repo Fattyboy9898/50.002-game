@@ -4,9 +4,14 @@ module game_beta (
 
     
     input button1_in,
-    input button2_in;
-
+    input button2_in,
     
+    output debug_state[6],
+    output debug_timer[6],
+    output debug_timer2[6]
+    //output b1_out[16],
+    //output b2_out[16],
+    //output debug_slowclk
 
   ) 
 
@@ -56,8 +61,12 @@ module game_beta (
     game_controlUnit.button2 = button2_in;
     
     
+    //debug state output 
+    debug_state = game_controlUnit.debug_state;
+    debug_timer =  game_timer_detector.out;
+    debug_timer2 = timer.value;
     
-    game_controlUnit.st=game_timer_detector.out;
+    game_controlUnit.st = game_timer_detector.out;
     game_controlUnit.st_easy = edge_detector_st_easy.out;
     game_controlUnit.st_med = edge_detector_st_med.out;
     game_controlUnit.st_hard = edge_detectoR_st_hard.out;
@@ -74,7 +83,11 @@ module game_beta (
     game_regFile.we = game_controlUnit.we;
     game_regFile.read_address_a = game_controlUnit.regfile_read_address_a;
     game_regFile.read_address_b = game_controlUnit.regfile_read_address_b;
+    game_regFile.read_address_o = game_controlUnit.regfile_read_address_o;
     game_regFile.write_address = game_controlUnit.regfile_write_address;
+    
+    //bootstrap reg b output to cu for convenient branching conditions
+    game_controlUnit.regfile_data_in = game_regFile.out_b;
     
     //asel mux
     case(game_controlUnit.asel){
@@ -105,15 +118,14 @@ module game_beta (
     
     //to_alufn mux
     case(game_controlUnit.to_alufn){
-      b00 : to_alufn_out = 6b000000;
-      b01 : to_alufn_out = 6b000001;
-      b10 : to_alufn_out = 6b000010;
-      b11 : to_alufn_out = game_regFile.out_o;
+      b00 : game_alu.alufn = 6b000000;
+      b01 : game_alu.alufn = 6b000001;
+      b10 : game_alu.alufn = 6b000010;
+      b11 : game_alu.alufn = game_regFile.out_o;
     }
     // alufn_sel mux 
     case(game_controlUnit.alufn_sel){
-      b0 : game_alu.alufn = game_controlUnit.alufn;
-      b1 : game_alu.alufn = to_alufn_out;   
+      b0 : game_alu.alufn = game_controlUnit.alufn;  
     }
 
     

@@ -19,6 +19,12 @@ module au_top_0 (
   
   
   
+  reg [15:0] a;
+  
+  reg [15:0] b;
+  
+  reg [5:0] alufn;
+  
   reg rst;
   
   wire [1-1:0] M_reset_cond_out;
@@ -28,21 +34,75 @@ module au_top_0 (
     .in(M_reset_cond_in),
     .out(M_reset_cond_out)
   );
-  wire [10-1:0] M_flasher_led;
-  flasher_2 flasher (
+  wire [1-1:0] M_edge_detector_button1_out;
+  reg [1-1:0] M_edge_detector_button1_in;
+  edge_detector_2 edge_detector_button1 (
     .clk(clk),
-    .led(M_flasher_led)
+    .in(M_edge_detector_button1_in),
+    .out(M_edge_detector_button1_out)
+  );
+  wire [1-1:0] M_edge_detector_button2_out;
+  reg [1-1:0] M_edge_detector_button2_in;
+  edge_detector_2 edge_detector_button2 (
+    .clk(clk),
+    .in(M_edge_detector_button2_in),
+    .out(M_edge_detector_button2_out)
+  );
+  wire [1-1:0] M_btn_cond_1_out;
+  reg [1-1:0] M_btn_cond_1_in;
+  button_conditioner_3 btn_cond_1 (
+    .clk(clk),
+    .in(M_btn_cond_1_in),
+    .out(M_btn_cond_1_out)
+  );
+  wire [1-1:0] M_btn_cond_2_out;
+  reg [1-1:0] M_btn_cond_2_in;
+  button_conditioner_3 btn_cond_2 (
+    .clk(clk),
+    .in(M_btn_cond_2_in),
+    .out(M_btn_cond_2_out)
+  );
+  wire [6-1:0] M_gameMachine_debug_state;
+  wire [6-1:0] M_gameMachine_debug_timer;
+  wire [6-1:0] M_gameMachine_debug_timer2;
+  reg [1-1:0] M_gameMachine_button1_in;
+  reg [1-1:0] M_gameMachine_button2_in;
+  game_beta_4 gameMachine (
+    .clk(clk),
+    .rst(rst),
+    .button1_in(M_gameMachine_button1_in),
+    .button2_in(M_gameMachine_button2_in),
+    .debug_state(M_gameMachine_debug_state),
+    .debug_timer(M_gameMachine_debug_timer),
+    .debug_timer2(M_gameMachine_debug_timer2)
+  );
+  wire [7-1:0] M_seg_seg;
+  wire [4-1:0] M_seg_sel;
+  reg [16-1:0] M_seg_values;
+  multi_seven_seg_5 seg (
+    .clk(clk),
+    .rst(rst),
+    .values(M_seg_values),
+    .seg(M_seg_seg),
+    .sel(M_seg_sel)
   );
   
   always @* begin
     M_reset_cond_in = ~rst_n;
     rst = M_reset_cond_out;
-    usb_tx = usb_rx;
     led = 8'h00;
+    usb_tx = usb_rx;
     io_led = 24'h000000;
-    io_seg = 8'hff;
-    io_sel = 4'hf;
-    io_led[0+0+7-:8] = M_flasher_led[0+7-:8];
-    io_led[8+0+1-:2] = M_flasher_led[8+1-:2];
+    io_seg = ~M_seg_seg;
+    io_sel = ~M_seg_sel;
+    M_seg_values = 16'h0000;
+    M_btn_cond_1_in = io_button[4+0-:1];
+    M_btn_cond_2_in = io_button[3+0-:1];
+    M_edge_detector_button1_in = M_btn_cond_1_out;
+    M_edge_detector_button2_in = M_btn_cond_2_out;
+    M_gameMachine_button1_in = M_edge_detector_button1_out;
+    M_gameMachine_button2_in = M_edge_detector_button2_out;
+    io_led[0+7-:8] = M_gameMachine_debug_state;
+    io_led[8+7-:8] = M_gameMachine_debug_timer;
   end
 endmodule

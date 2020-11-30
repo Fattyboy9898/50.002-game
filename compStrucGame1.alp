@@ -5,6 +5,7 @@
     <src>game_cu.luc</src>
     <src>multi_seven_seg.luc</src>
     <src>customCounter.luc</src>
+    <component>pipeline.luc</component>
     <src>game_regfiles.luc</src>
     <component>counter.luc</component>
     <src>seven_seg.luc</src>
@@ -21,6 +22,7 @@
     <component>edge_detector.luc</component>
     <src>flasher.luc</src>
     <src>game_beta.luc</src>
+    <component>button_conditioner.luc</component>
     <constraint lib="true">alchitry.acf</constraint>
     <constraint lib="true">io.acf</constraint>
     <constraint lib="true">au.xdc</constraint>

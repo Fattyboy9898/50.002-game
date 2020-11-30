@@ -53,11 +53,30 @@ module fasixteen (
         
       // IF LSB IS 1 THEN IT IS  SUBTRACTION  
         
-      b1:                                          //subtraction 
-        out = a - b;                                                        
-        z = ~|out;                                                          
-        v = (((a[15])&(~b[15])&(~out[15])) | ((~a[15])&(b[15])&(out[15])));  
-        n = out[15];
+      b1:                                        //subtraction 
+        if(alufn[1]==0){
+          out = a - b;                                                        
+          z = ~|out;                                                          
+          v = (((a[15])&(~b[15])&(~out[15])) | ((~a[15])&(b[15])&(out[15])));  
+          n = out[15];
+        }
+        
+        //modulo
+        else if(alufn[1]==1){
+        
+          if( b != 0 ){
+            out = a - ((a/b)*b);
+            z = ~|out;                                                          
+            v = (((a[15])&(~b[15])&(~out[15])) | ((~a[15])&(b[15])&(out[15])));  
+            n = out[15];
+          } else {
+            out = a;
+            z = ~|out;                                                          
+            v = (((a[15])&(~b[15])&(~out[15])) | ((~a[15])&(b[15])&(out[15])));  
+            n = out[15];
+          }
+          
+        }
           
             
       default:                                                               
@@ -65,6 +84,20 @@ module fasixteen (
         z = b0;
         v = b0;
         n = b0;
+    }
+    
+    if(alufn[1:0] == b11){
+          if( b != 0 ){
+            out = a - ((a/b)*b);
+            z = ~|out;                                                          
+            v = (((a[15])&(~b[15])&(~out[15])) | ((~a[15])&(b[15])&(out[15])));  
+            n = out[15];
+          } else {
+            out = a;
+            z = ~|out;                                                          
+            v = (((a[15])&(~b[15])&(~out[15])) | ((~a[15])&(b[15])&(out[15])));  
+            n = out[15];
+          }
     }
 
     s = out[15:0];  
