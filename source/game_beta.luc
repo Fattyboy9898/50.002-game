@@ -6,9 +6,14 @@ module game_beta (
     input button1_in,
     input button2_in,
     
+    output decimal_counter_decrease,
+    output decimal_counter_rst,
     output debug_state[6],
     output debug_timer[6],
-    output debug_timer2[6]
+    output debug_countdown_timer[6],
+    output debug_timer_easy[6],
+    output debug_timer_medium[6],
+    output debug_timer_hard[6]
     //output b1_out[16],
     //output b2_out[16],
     //output debug_slowclk
@@ -43,8 +48,8 @@ module game_beta (
         game_regfiles game_regFile;
       
         counter easy_timer(#SIZE(1),#DIV(26));
-        counter medium_timer(#SIZE(1),#DIV(26));
-        counter hard_timer(#SIZE(1),#DIV(26));
+        counter medium_timer(#SIZE(1),#DIV(25));
+        counter hard_timer(#SIZE(1),#DIV(24));
         counter timer(#SIZE(1),#DIV(26));
     }
   }
@@ -60,11 +65,17 @@ module game_beta (
     game_controlUnit.button1 = button1_in;
     game_controlUnit.button2 = button2_in;
     
+    //output of cu to increase 7 seven_seg
+    decimal_counter_decrease = game_controlUnit.decimal_counter_decrease;
+    decimal_counter_rst = game_controlUnit.decimal_counter_rst;
     
     //debug state output 
     debug_state = game_controlUnit.debug_state;
     debug_timer =  game_timer_detector.out;
-    debug_timer2 = timer.value;
+    debug_countdown_timer = timer.value;
+    debug_timer_easy = easy_timer.value;
+    debug_timer_medium = medium_timer.value;
+    debug_timer_hard = hard_timer.value;
     
     game_controlUnit.st = game_timer_detector.out;
     game_controlUnit.st_easy = edge_detector_st_easy.out;

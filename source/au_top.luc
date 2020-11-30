@@ -27,6 +27,7 @@ module au_top (
     
     button_conditioner btn_cond_1;
     button_conditioner btn_cond_2;
+    multi_dec_ctr dec_ctr;
     
     .rst(rst) {
       game_beta gameMachine;
@@ -60,6 +61,17 @@ module au_top (
     
     io_led[0] = gameMachine.debug_state;
     io_led[1] = gameMachine.debug_timer;
+    io_led[2] = gameMachine.debug_countdown_timer;
+    io_led[2][1] = gameMachine.debug_timer_easy;
+    io_led[2][2] = gameMachine.debug_timer_medium;
+    io_led[2][3] = gameMachine.debug_timer_hard;
+    
+    //seven seg code
+    dec_ctr.inc = gameMachine.debug_timer_easy;
+    dec_ctr.rst = 0;
+    seg.values = dec_ctr.digits;
+    io_seg = ~seg.seg;
+    io_sel = ~seg.sel;
 
         
       

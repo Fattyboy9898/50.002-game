@@ -5,6 +5,7 @@
     <src>game_cu.luc</src>
     <src>multi_seven_seg.luc</src>
     <src>customCounter.luc</src>
+    <src>multi_dec_ctr.luc</src>
     <component>pipeline.luc</component>
     <src>game_regfiles.luc</src>
     <component>counter.luc</component>

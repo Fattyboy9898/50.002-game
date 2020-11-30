@@ -10,7 +10,10 @@ module game_cu (
     input st_med[1],
     input st_hard[1],
     input st[1],
+    //input rng_rdy[1],
     
+    output decimal_counter_decrease,
+    output decimal_counter_rst,
     output alufn[6],
     output asel[3],
     output bsel[3],
@@ -93,6 +96,9 @@ module game_cu (
     wdsel=0;
     alufn_sel = 0;
     debug_state = 0;
+
+    decimal_counter_decrease=0;
+    decimal_counter_rst=0;
     
     
     if(rst){
@@ -409,6 +415,7 @@ module game_cu (
           regfile_read_address_b = h6;
           regfile_write_address = h6;
           wdsel=b00;
+          decimal_counter_decrease = -1;
           
           game_fsm.d=game_fsm.GAME_TIMER_CHECK;
           
