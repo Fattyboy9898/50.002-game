@@ -12,26 +12,31 @@ module au_top (
     input io_button [5],    // 5 buttons on IO Shield up-0,centre-1, bottom-2, left-3, right-4
     input io_dip [3][8]     // DIP switches on IO Shield
   ) {
+  /*
   sig a[16];
   sig b[16];
   sig alufn[6];
+  */
   sig rst;                  // reset signal
-   
+  
+  rngGenerator rngGen(.clk(clk), .rst(rst));
+  
   .clk(clk) {
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
-    
+    /*
     edge_detector edge_detector_button1 (#RISE(1), #FALL(0));
     edge_detector edge_detector_button2 (#RISE(1), #FALL(0));
     
     button_conditioner btn_cond_1;
     button_conditioner btn_cond_2;
-    
+    */
     .rst(rst) {
+    /*
       game_beta gameMachine;
       multi_seven_seg seg;
-      
+      */
     }
   }
 
@@ -44,9 +49,11 @@ module au_top (
 
     usb_tx = usb_rx;        // echo the serial data
     io_led = 3x{{8h00}};    // turn LEDs off
+    /*
     io_seg = ~seg.seg;          // connect segment to driver
     io_sel = ~seg.sel;           // connect digit to driver
     seg.values = {4h0,4h0,4h0,4h0}; // 4digits default seven seg display
+    
     
     //btn set up
     btn_cond_1.in = io_button[4];
@@ -60,8 +67,12 @@ module au_top (
     
     io_led[0] = gameMachine.debug_state;
     io_led[1] = gameMachine.debug_timer;
-
-        
-      
+    */
+    
+    io_seg = 0;
+    io_sel = 0;
+    if (rngGen.rng_ready == 1){
+      io_led[0] = rngGen.out;
+    }
   }
 }

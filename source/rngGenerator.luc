@@ -1,0 +1,24 @@
+module rngGenerator (
+    input clk,  // clock
+    input rst,  // reset
+    output rng_ready,
+    output out[7]
+  ) {
+  counter slowclock(#SIZE(1), #DIV(25), .clk(clk), .rst(rst)); 
+  pn_gen rng(.clk(clk), .rst(rst));
+  sig check[7];
+  
+  always {
+    rng_ready=0;
+    rng.next = slowclock.value;
+    rng.seed = hDEADBEEF;
+    check = rng.num[6:0];
+    if (check <=99){
+      out = check;
+      rng_ready = 1;
+      }
+    else {
+      out=0;
+    }
+  }
+}

@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="compStrucGame1" board="Alchitry Au" language="Lucid" version="3">
   <files>
+    <src>decimal_counter.luc</src>
     <src>delayer.luc</src>
-    <src>game_cu.luc</src>
-    <src>multi_seven_seg.luc</src>
-    <src>customCounter.luc</src>
-    <component>pipeline.luc</component>
-    <src>game_regfiles.luc</src>
-    <component>counter.luc</component>
     <src>seven_seg.luc</src>
+    <component>pipeline.luc</component>
+    <src top="true">au_top.luc</src>
+    <src>game_beta.luc</src>
+    <src>boolesixteen.luc</src>
+    <component>counter.luc</component>
+    <src>rngGenerator.luc</src>
+    <src>multi_seven_seg.luc</src>
+    <component>decoder.luc</component>
+    <src>game_cu.luc</src>
+    <src>game_regfiles.luc</src>
+    <src>customCounter.luc</src>
+    <src>fasixteen.luc</src>
     <src>alufn_counter.luc</src>
     <src>comparesixteen.luc</src>
-    <component>decoder.luc</component>
-    <src>boolesixteen.luc</src>
-    <src>alu.luc</src>
-    <src top="true">au_top.luc</src>
-    <src>fasixteen.luc</src>
+    <component>pn_gen.luc</component>
     <src>shiftersixteen.luc</src>
-    <src>decimal_counter.luc</src>
+    <src>flasher.luc</src>
     <component>reset_conditioner.luc</component>
     <component>edge_detector.luc</component>
-    <src>flasher.luc</src>
-    <src>game_beta.luc</src>
+    <src>alu.luc</src>
     <component>button_conditioner.luc</component>
     <constraint lib="true">alchitry.acf</constraint>
     <constraint lib="true">io.acf</constraint>

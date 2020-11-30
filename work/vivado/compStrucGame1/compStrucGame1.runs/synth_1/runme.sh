@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.runs/synth_1'
+HD_PWD='C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.runs/synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log
