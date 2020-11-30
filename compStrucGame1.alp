@@ -18,6 +18,7 @@
     <src>shiftersixteen.luc</src>
     <src>decimal_counter.luc</src>
     <component>reset_conditioner.luc</component>
+    <component>edge_detector.luc</component>
     <src>flasher.luc</src>
     <src>game_beta.luc</src>
     <constraint lib="true">alchitry.acf</constraint>

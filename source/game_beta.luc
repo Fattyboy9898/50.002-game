@@ -1,15 +1,12 @@
 module game_beta (
     input clk,  // clock
     input rst,  // reset
-    output out,
 
     
-    input p1_button,
-    input p2_button,
+    input button1_in,
+    input button2_in;
 
     
-    output p1_out[16],
-    output p2_out[16],
 
   ) 
 
@@ -19,25 +16,55 @@ module game_beta (
     //temp variables
   sig inputAlu_a[16];
   sig inputAlu_b[16];
+  sig to_alufn_out[6];
 
   alu game_alu;
   
   .clk(clk){
+  
+    //EDGE DETECTOR FOR BUTTONS
+    //edge_detector edge_detector_button1(#RISE(#1),#FALL(0));
+    //edge_detector edge_detector_button2(#RISE(#1),#FALL(0));
+    
+    edge_detector edge_detector_st_easy(#RISE(1), #FALL(0));
+    edge_detector edge_detector_st_med(#RISE(1), # FALL(0));
+    edge_detector edge_detectoR_st_hard(#RISE(1), #FALL(0));
+    
+    edge_detector game_timer_detector(#RISE(1), #FALL(0));
+    
+    
       .rst(rst){
         game_cu game_controlUnit;
         game_regfiles game_regFile;
       
-        counter easy_timer();
-        counter medium_timer();
-        counter hard_timer();
-        counter timer();
+        counter easy_timer(#SIZE(1),#DIV(26));
+        counter medium_timer(#SIZE(1),#DIV(26));
+        counter hard_timer(#SIZE(1),#DIV(26));
+        counter timer(#SIZE(1),#DIV(26));
     }
   }
 
   always {
-    out = 0;
+    //EDGE DETECTORS
+    game_timer_detector.in = timer.value;
+    edge_detector_st_easy.in = easy_timer.value;
+    edge_detector_st_med.in = medium_timer.value;
+    edge_detectoR_st_hard.in = hard_timer.value;
+    
+    //setting up control unit
+    game_controlUnit.button1 = button1_in;
+    game_controlUnit.button2 = button2_in;
+    
+    
+    
+    game_controlUnit.st=game_timer_detector.out;
+    game_controlUnit.st_easy = edge_detector_st_easy.out;
+    game_controlUnit.st_med = edge_detector_st_med.out;
+    game_controlUnit.st_hard = edge_detectoR_st_hard.out;
+    
     inputAlu_a=0;
     inputAlu_b=0;
+    to_alufn_out=0;
     //alu
     game_alu.a = inputAlu_a;
     game_alu.b = inputAlu_b;
@@ -45,9 +72,9 @@ module game_beta (
     
     //setup  regfile unit
     game_regFile.we = game_controlUnit.we;
-    game_regFile.ra = game_controlUnit.ra;
-    game_regFile.rb = game_controlUnit.rb;
-    game_regFile.rc = game_controlUnit.rc;
+    game_regFile.read_address_a = game_controlUnit.regfile_read_address_a;
+    game_regFile.read_address_b = game_controlUnit.regfile_read_address_b;
+    game_regFile.write_address = game_controlUnit.regfile_write_address;
     
     //asel mux
     case(game_controlUnit.asel){
@@ -75,5 +102,20 @@ module game_beta (
       b11 : game_regFile.data = h0;
       default: game_regFile.data = game_alu.alu;
     }
+    
+    //to_alufn mux
+    case(game_controlUnit.to_alufn){
+      b00 : to_alufn_out = 6b000000;
+      b01 : to_alufn_out = 6b000001;
+      b10 : to_alufn_out = 6b000010;
+      b11 : to_alufn_out = game_regFile.out_o;
+    }
+    // alufn_sel mux 
+    case(game_controlUnit.alufn_sel){
+      b0 : game_alu.alufn = game_controlUnit.alufn;
+      b1 : game_alu.alufn = to_alufn_out;   
+    }
+
+    
   }
 }
