@@ -4,7 +4,7 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module rngGenerator_1 (
+module rngGenerator_7 (
     input clk,
     input rst,
     output reg rng_ready,
@@ -14,7 +14,7 @@ module rngGenerator_1 (
   
   
   wire [1-1:0] M_slowclock_value;
-  counter_3 slowclock (
+  counter_17 slowclock (
     .clk(clk),
     .rst(rst),
     .value(M_slowclock_value)
@@ -23,7 +23,7 @@ module rngGenerator_1 (
   wire [32-1:0] M_rng_num;
   reg [1-1:0] M_rng_next;
   reg [32-1:0] M_rng_seed;
-  pn_gen_4 rng (
+  pn_gen_18 rng (
     .clk(clk),
     .rst(rst),
     .next(M_rng_next),

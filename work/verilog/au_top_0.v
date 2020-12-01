@@ -19,23 +19,89 @@ module au_top_0 (
   
   
   
+  reg [15:0] a;
+  
+  reg [15:0] b;
+  
+  reg [5:0] alufn;
+  
   reg rst;
   
+  wire [1-1:0] M_reset_cond_out;
+  reg [1-1:0] M_reset_cond_in;
+  reset_conditioner_1 reset_cond (
+    .clk(clk),
+    .in(M_reset_cond_in),
+    .out(M_reset_cond_out)
+  );
+  wire [1-1:0] M_edge_detector_button1_out;
+  reg [1-1:0] M_edge_detector_button1_in;
+  edge_detector_2 edge_detector_button1 (
+    .clk(clk),
+    .in(M_edge_detector_button1_in),
+    .out(M_edge_detector_button1_out)
+  );
+  wire [1-1:0] M_edge_detector_button2_out;
+  reg [1-1:0] M_edge_detector_button2_in;
+  edge_detector_2 edge_detector_button2 (
+    .clk(clk),
+    .in(M_edge_detector_button2_in),
+    .out(M_edge_detector_button2_out)
+  );
+  wire [1-1:0] M_btn_cond_1_out;
+  reg [1-1:0] M_btn_cond_1_in;
+  button_conditioner_3 btn_cond_1 (
+    .clk(clk),
+    .in(M_btn_cond_1_in),
+    .out(M_btn_cond_1_out)
+  );
+  wire [1-1:0] M_btn_cond_2_out;
+  reg [1-1:0] M_btn_cond_2_in;
+  button_conditioner_3 btn_cond_2 (
+    .clk(clk),
+    .in(M_btn_cond_2_in),
+    .out(M_btn_cond_2_out)
+  );
+  wire [16-1:0] M_dec_ctr_digits;
+  reg [1-1:0] M_dec_ctr_rst;
+  reg [1-1:0] M_dec_ctr_inc;
+  multi_dec_ctr_4 dec_ctr (
+    .clk(clk),
+    .rst(M_dec_ctr_rst),
+    .inc(M_dec_ctr_inc),
+    .digits(M_dec_ctr_digits)
+  );
+  wire [6-1:0] M_gameMachine_debug_state;
+  wire [6-1:0] M_gameMachine_debug_timer;
+  wire [6-1:0] M_gameMachine_debug_timer2;
+  reg [1-1:0] M_gameMachine_button1_in;
+  reg [1-1:0] M_gameMachine_button2_in;
+  game_beta_5 gameMachine (
+    .clk(clk),
+    .rst(rst),
+    .button1_in(M_gameMachine_button1_in),
+    .button2_in(M_gameMachine_button2_in),
+    .debug_state(M_gameMachine_debug_state),
+    .debug_timer(M_gameMachine_debug_timer),
+    .debug_timer2(M_gameMachine_debug_timer2)
+  );
+  wire [7-1:0] M_seg_seg;
+  wire [4-1:0] M_seg_sel;
+  reg [16-1:0] M_seg_values;
+  multi_seven_seg_6 seg (
+    .clk(clk),
+    .rst(rst),
+    .values(M_seg_values),
+    .seg(M_seg_seg),
+    .sel(M_seg_sel)
+  );
   wire [1-1:0] M_rngGen_rng_ready;
   wire [7-1:0] M_rngGen_out;
-  rngGenerator_1 rngGen (
+  rngGenerator_7 rngGen (
     .clk(clk),
     .rst(rst),
     .rng_ready(M_rngGen_rng_ready),
     .out(M_rngGen_out)
-  );
-  
-  wire [1-1:0] M_reset_cond_out;
-  reg [1-1:0] M_reset_cond_in;
-  reset_conditioner_2 reset_cond (
-    .clk(clk),
-    .in(M_reset_cond_in),
-    .out(M_reset_cond_out)
   );
   
   always @* begin
@@ -44,10 +110,23 @@ module au_top_0 (
     led = 8'h00;
     usb_tx = usb_rx;
     io_led = 24'h000000;
-    io_seg = 1'h0;
-    io_sel = 1'h0;
+    io_seg = ~M_seg_seg;
+    io_sel = ~M_seg_sel;
+    M_seg_values = 16'h0000;
+    M_btn_cond_1_in = io_button[4+0-:1];
+    M_btn_cond_2_in = io_button[3+0-:1];
+    M_edge_detector_button1_in = M_btn_cond_1_out;
+    M_edge_detector_button2_in = M_btn_cond_2_out;
+    M_gameMachine_button1_in = M_edge_detector_button1_out;
+    M_gameMachine_button2_in = M_edge_detector_button2_out;
+    M_dec_ctr_inc = 1'h0;
+    M_dec_ctr_rst = 1'h0;
+    M_seg_values = M_dec_ctr_digits;
+    io_seg = ~M_seg_seg;
+    io_sel = ~M_seg_sel;
     if (M_rngGen_rng_ready == 1'h1) begin
       io_led[0+7-:8] = M_rngGen_out;
+      M_dec_ctr_inc = 1'h1;
     end
   end
 endmodule

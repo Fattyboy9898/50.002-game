@@ -84,10 +84,28 @@ set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib {
-  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_3.v
-  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/pn_gen_4.v
-  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/reset_conditioner_2.v
-  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/rngGenerator_1.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/alu_10.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/boolesixteen_22.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/button_conditioner_3.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/comparesixteen_20.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_13.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_14.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_17.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/decimal_counter_9.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/decoder_16.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/edge_detector_2.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/fasixteen_19.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/game_beta_5.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/game_cu_11.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/game_regfiles_12.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/multi_dec_ctr_4.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/multi_seven_seg_6.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/pipeline_8.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/pn_gen_18.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/reset_conditioner_1.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/rngGenerator_7.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/seven_seg_15.v
+  C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/shiftersixteen_21.v
   C:/Users/dylan/Desktop/50.002-game/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/au_top_0.v
 }
 OPTRACE "Adding files" END { }
