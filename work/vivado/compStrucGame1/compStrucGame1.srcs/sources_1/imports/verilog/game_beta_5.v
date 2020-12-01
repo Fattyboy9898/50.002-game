@@ -16,7 +16,10 @@ module game_beta_5 (
     output reg [5:0] debug_countdown_timer,
     output reg [5:0] debug_timer_easy,
     output reg [5:0] debug_timer_medium,
-    output reg [5:0] debug_timer_hard
+    output reg [5:0] debug_timer_hard,
+    output reg [3:0] debug_ra,
+    output reg [3:0] debug_rb,
+    output reg [3:0] debug_wa
   );
   
   
@@ -44,27 +47,6 @@ module game_beta_5 (
     .n(M_game_alu_n)
   );
   
-  wire [1-1:0] M_edge_detector_st_easy_out;
-  reg [1-1:0] M_edge_detector_st_easy_in;
-  edge_detector_2 edge_detector_st_easy (
-    .clk(clk),
-    .in(M_edge_detector_st_easy_in),
-    .out(M_edge_detector_st_easy_out)
-  );
-  wire [1-1:0] M_edge_detector_st_med_out;
-  reg [1-1:0] M_edge_detector_st_med_in;
-  edge_detector_2 edge_detector_st_med (
-    .clk(clk),
-    .in(M_edge_detector_st_med_in),
-    .out(M_edge_detector_st_med_out)
-  );
-  wire [1-1:0] M_edge_detectoR_st_hard_out;
-  reg [1-1:0] M_edge_detectoR_st_hard_in;
-  edge_detector_2 edge_detectoR_st_hard (
-    .clk(clk),
-    .in(M_edge_detectoR_st_hard_in),
-    .out(M_edge_detectoR_st_hard_out)
-  );
   wire [1-1:0] M_game_timer_detector_out;
   reg [1-1:0] M_game_timer_detector_in;
   edge_detector_2 game_timer_detector (
@@ -79,10 +61,10 @@ module game_beta_5 (
   wire [3-1:0] M_game_controlUnit_bsel;
   wire [2-1:0] M_game_controlUnit_to_alufn;
   wire [2-1:0] M_game_controlUnit_alufn_sel;
-  wire [4-1:0] M_game_controlUnit_regfile_write_address;
-  wire [4-1:0] M_game_controlUnit_regfile_read_address_a;
-  wire [4-1:0] M_game_controlUnit_regfile_read_address_b;
-  wire [4-1:0] M_game_controlUnit_regfile_read_address_o;
+  wire [6-1:0] M_game_controlUnit_regfile_write_address;
+  wire [6-1:0] M_game_controlUnit_regfile_read_address_a;
+  wire [6-1:0] M_game_controlUnit_regfile_read_address_b;
+  wire [6-1:0] M_game_controlUnit_regfile_read_address_o;
   wire [1-1:0] M_game_controlUnit_we;
   wire [1-1:0] M_game_controlUnit_wdsel;
   wire [6-1:0] M_game_controlUnit_debug_state;
@@ -93,6 +75,7 @@ module game_beta_5 (
   reg [1-1:0] M_game_controlUnit_st_med;
   reg [1-1:0] M_game_controlUnit_st_hard;
   reg [1-1:0] M_game_controlUnit_st;
+  reg [1-1:0] M_game_controlUnit_rng_rdy;
   game_cu_10 game_controlUnit (
     .clk(clk),
     .rst(rst),
@@ -103,6 +86,7 @@ module game_beta_5 (
     .st_med(M_game_controlUnit_st_med),
     .st_hard(M_game_controlUnit_st_hard),
     .st(M_game_controlUnit_st),
+    .rng_rdy(M_game_controlUnit_rng_rdy),
     .decimal_counter_decrease(M_game_controlUnit_decimal_counter_decrease),
     .decimal_counter_rst(M_game_controlUnit_decimal_counter_rst),
     .alufn(M_game_controlUnit_alufn),
@@ -121,6 +105,9 @@ module game_beta_5 (
   wire [16-1:0] M_game_regFile_out_a;
   wire [16-1:0] M_game_regFile_out_b;
   wire [6-1:0] M_game_regFile_out_o;
+  wire [4-1:0] M_game_regFile_debug_out_write_address;
+  wire [4-1:0] M_game_regFile_debug_out_ra;
+  wire [4-1:0] M_game_regFile_debug_out_rb;
   reg [1-1:0] M_game_regFile_we;
   reg [4-1:0] M_game_regFile_read_address_a;
   reg [4-1:0] M_game_regFile_read_address_b;
@@ -138,58 +125,67 @@ module game_beta_5 (
     .data(M_game_regFile_data),
     .out_a(M_game_regFile_out_a),
     .out_b(M_game_regFile_out_b),
-    .out_o(M_game_regFile_out_o)
+    .out_o(M_game_regFile_out_o),
+    .debug_out_write_address(M_game_regFile_debug_out_write_address),
+    .debug_out_ra(M_game_regFile_debug_out_ra),
+    .debug_out_rb(M_game_regFile_debug_out_rb)
+  );
+  wire [1-1:0] M_rngGen_rng_ready;
+  wire [7-1:0] M_rngGen_out;
+  rngGenerator_12 rngGen (
+    .clk(clk),
+    .rst(rst),
+    .rng_ready(M_rngGen_rng_ready),
+    .out(M_rngGen_out)
   );
   wire [1-1:0] M_easy_timer_value;
-  counter_12 easy_timer (
+  counter_13 easy_timer (
     .clk(clk),
     .rst(rst),
     .value(M_easy_timer_value)
   );
   wire [1-1:0] M_medium_timer_value;
-  counter_13 medium_timer (
+  counter_14 medium_timer (
     .clk(clk),
     .rst(rst),
     .value(M_medium_timer_value)
   );
   wire [1-1:0] M_hard_timer_value;
-  counter_14 hard_timer (
+  counter_15 hard_timer (
     .clk(clk),
     .rst(rst),
     .value(M_hard_timer_value)
   );
   wire [1-1:0] M_timer_value;
-  counter_12 timer (
+  counter_13 timer (
     .clk(clk),
     .rst(rst),
     .value(M_timer_value)
   );
   
   always @* begin
-    M_game_timer_detector_in = M_timer_value;
-    M_edge_detector_st_easy_in = M_easy_timer_value;
-    M_edge_detector_st_med_in = M_medium_timer_value;
-    M_edge_detectoR_st_hard_in = M_hard_timer_value;
     M_game_controlUnit_button1 = button1_in;
     M_game_controlUnit_button2 = button2_in;
+    M_game_controlUnit_rng_rdy = M_rngGen_rng_ready;
     decimal_counter_decrease = M_game_controlUnit_decimal_counter_decrease;
     decimal_counter_rst = M_game_controlUnit_decimal_counter_rst;
+    debug_ra = M_game_regFile_debug_out_ra;
+    debug_rb = M_game_regFile_debug_out_rb;
+    debug_wa = M_game_regFile_debug_out_write_address;
     debug_state = M_game_controlUnit_debug_state;
-    debug_timer = M_game_timer_detector_out;
+    debug_timer = M_timer_value;
     debug_countdown_timer = M_timer_value;
     debug_timer_easy = M_easy_timer_value;
     debug_timer_medium = M_medium_timer_value;
     debug_timer_hard = M_hard_timer_value;
+    M_game_timer_detector_in = M_timer_value;
     M_game_controlUnit_st = M_game_timer_detector_out;
-    M_game_controlUnit_st_easy = M_edge_detector_st_easy_out;
-    M_game_controlUnit_st_med = M_edge_detector_st_med_out;
-    M_game_controlUnit_st_hard = M_edge_detectoR_st_hard_out;
+    M_game_controlUnit_st_easy = M_easy_timer_value;
+    M_game_controlUnit_st_med = M_medium_timer_value;
+    M_game_controlUnit_st_hard = M_hard_timer_value;
     inputAlu_a = 1'h0;
     inputAlu_b = 1'h0;
     to_alufn_out = 1'h0;
-    M_game_alu_a = inputAlu_a;
-    M_game_alu_b = inputAlu_b;
-    M_game_alu_alufn = M_game_controlUnit_alufn;
     M_game_regFile_we = M_game_controlUnit_we;
     M_game_regFile_read_address_a = M_game_controlUnit_regfile_read_address_a;
     M_game_regFile_read_address_b = M_game_controlUnit_regfile_read_address_b;
@@ -238,6 +234,9 @@ module game_beta_5 (
         inputAlu_b = 4'h0;
       end
     endcase
+    M_game_alu_a = inputAlu_a;
+    M_game_alu_b = inputAlu_b;
+    M_game_alu_alufn = M_game_controlUnit_alufn;
     
     case (M_game_controlUnit_alufn_sel)
       2'h0: begin

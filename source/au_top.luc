@@ -16,7 +16,6 @@ module au_top (
   sig b[16];
   sig alufn[6];
   sig rst;                  // reset signal
-   
   .clk(clk) {
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
@@ -59,15 +58,23 @@ module au_top (
     gameMachine.button1_in = edge_detector_button1.out;
     gameMachine.button2_in = edge_detector_button2.out;
     
-    io_led[0] = gameMachine.debug_state;
-    io_led[1] = gameMachine.debug_timer;
-    io_led[2] = gameMachine.debug_countdown_timer;
-    io_led[2][1] = gameMachine.debug_timer_easy;
-    io_led[2][2] = gameMachine.debug_timer_medium;
-    io_led[2][3] = gameMachine.debug_timer_hard;
+    
+    
+    //DEBUGGING CODE
+    io_led[0] = gameMachine.debug_ra;
+    io_led[1] = gameMachine.debug_rb;
+    io_led[2] = gameMachine.debug_wa;
+    io_led[0] = gameMachine.debug_register;
+    //io_led[0] = gameMachine.debug_state;
+    //io_led[1] = gameMachine.debug_timer;
+    //io_led[2] = gameMachine.debug_countdown_timer;
+    //io_led[2][1] = gameMachine.debug_timer_easy;
+    //io_led[2][2] = gameMachine.debug_timer_medium;
+    //io_led[2][3] = gameMachine.debug_timer_hard;
     
     //seven seg code
-    dec_ctr.inc = gameMachine.debug_timer_easy;
+   
+    dec_ctr.inc = 8; // value of the timer left
     dec_ctr.rst = 0;
     seg.values = dec_ctr.digits;
     io_seg = ~seg.seg;

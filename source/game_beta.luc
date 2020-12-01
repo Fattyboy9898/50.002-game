@@ -13,7 +13,12 @@ module game_beta (
     output debug_countdown_timer[6],
     output debug_timer_easy[6],
     output debug_timer_medium[6],
-    output debug_timer_hard[6]
+    output debug_timer_hard[6],
+    
+    output debug_ra[4],
+    output debug_rb[4],
+    output debug_wa[4],
+    output debug_register[16]
     //output b1_out[16],
     //output b2_out[16],
     //output debug_slowclk
@@ -35,18 +40,15 @@ module game_beta (
     //EDGE DETECTOR FOR BUTTONS
     //edge_detector edge_detector_button1(#RISE(#1),#FALL(0));
     //edge_detector edge_detector_button2(#RISE(#1),#FALL(0));
+    edge_detector game_timer_detector(#RISE(1),#FALL(0));
     
-    edge_detector edge_detector_st_easy(#RISE(1), #FALL(0));
-    edge_detector edge_detector_st_med(#RISE(1), # FALL(0));
-    edge_detector edge_detectoR_st_hard(#RISE(1), #FALL(0));
-    
-    edge_detector game_timer_detector(#RISE(1), #FALL(0));
-    
-    
+
       .rst(rst){
+    
         game_cu game_controlUnit;
         game_regfiles game_regFile;
       
+        rngGenerator rngGen;
         counter easy_timer(#SIZE(1),#DIV(26));
         counter medium_timer(#SIZE(1),#DIV(25));
         counter hard_timer(#SIZE(1),#DIV(24));
@@ -56,39 +58,46 @@ module game_beta (
 
   always {
     //EDGE DETECTORS
-    game_timer_detector.in = timer.value;
-    edge_detector_st_easy.in = easy_timer.value;
-    edge_detector_st_med.in = medium_timer.value;
-    edge_detectoR_st_hard.in = hard_timer.value;
+
     
     //setting up control unit
     game_controlUnit.button1 = button1_in;
     game_controlUnit.button2 = button2_in;
+    
+    //rngGen
+    game_controlUnit.rng_rdy = rngGen.rng_ready;
+    
     
     //output of cu to increase 7 seven_seg
     decimal_counter_decrease = game_controlUnit.decimal_counter_decrease;
     decimal_counter_rst = game_controlUnit.decimal_counter_rst;
     
     //debug state output 
+
+    debug_ra = game_regFile.debug_out_ra;
+    debug_rb = game_regFile.debug_out_rb;
+    debug_wa = game_regFile.debug_out_write_address;
+    debug_register = game_regFile.;  
+
     debug_state = game_controlUnit.debug_state;
-    debug_timer =  game_timer_detector.out;
+    debug_timer =  timer.value;
     debug_countdown_timer = timer.value;
     debug_timer_easy = easy_timer.value;
     debug_timer_medium = medium_timer.value;
     debug_timer_hard = hard_timer.value;
     
+    
+    
+    game_timer_detector.in = timer.value;
     game_controlUnit.st = game_timer_detector.out;
-    game_controlUnit.st_easy = edge_detector_st_easy.out;
-    game_controlUnit.st_med = edge_detector_st_med.out;
-    game_controlUnit.st_hard = edge_detectoR_st_hard.out;
+    game_controlUnit.st_easy = easy_timer.value;
+    game_controlUnit.st_med = medium_timer.value;
+    game_controlUnit.st_hard = hard_timer.value;
     
     inputAlu_a=0;
     inputAlu_b=0;
     to_alufn_out=0;
-    //alu
-    game_alu.a = inputAlu_a;
-    game_alu.b = inputAlu_b;
-    game_alu.alufn = game_controlUnit.alufn;
+
     
     //setup  regfile unit
     game_regFile.we = game_controlUnit.we;
@@ -118,6 +127,12 @@ module game_beta (
       b110 : inputAlu_b = h63;
       b111 : inputAlu_b = h0;
     }
+    
+    //alu
+    game_alu.a = inputAlu_a;
+    game_alu.b = inputAlu_b;
+    game_alu.alufn = game_controlUnit.alufn;
+    
     //wdsel
     case(game_controlUnit.alufn_sel) {
       b00 : game_regFile.data= game_alu.alu;

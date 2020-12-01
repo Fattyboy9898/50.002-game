@@ -15,7 +15,10 @@ module game_regfiles_11 (
     input [15:0] data,
     output reg [15:0] out_a,
     output reg [15:0] out_b,
-    output reg [5:0] out_o
+    output reg [5:0] out_o,
+    output reg [3:0] debug_out_write_address,
+    output reg [3:0] debug_out_ra,
+    output reg [3:0] debug_out_rb
   );
   
   
@@ -55,6 +58,9 @@ module game_regfiles_11 (
     M_countdown_timer_d = M_countdown_timer_q;
     M_direction_d = M_direction_q;
     
+    debug_out_write_address = write_address;
+    debug_out_ra = read_address_a;
+    debug_out_rb = read_address_b;
     if (we) begin
       
       case (write_address)

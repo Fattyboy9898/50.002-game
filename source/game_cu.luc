@@ -10,7 +10,7 @@ module game_cu (
     input st_med[1],
     input st_hard[1],
     input st[1],
-    //input rng_rdy[1],
+    input rng_rdy[1],
     
     output decimal_counter_decrease,
     output decimal_counter_rst,
@@ -19,10 +19,10 @@ module game_cu (
     output bsel[3],
     output to_alufn[2],
     output alufn_sel[2],
-    output regfile_write_address[4],
-    output regfile_read_address_a[4],
-    output regfile_read_address_b[4],
-    output regfile_read_address_o[4],
+    output regfile_write_address[6],
+    output regfile_read_address_a[6],
+    output regfile_read_address_b[6],
+    output regfile_read_address_o[6],
     output we,
     output wdsel,
     
@@ -48,6 +48,7 @@ module game_cu (
       //TIMER
       GAME_TIMER_DECREASE,
       GAME_TIMER_CHECK,
+      GAME_TIMER_BRANCH,
       //DIFFICULTY CHECK
       GAME_DIFFICULTY_CHECK_EASY,
       GAME_DIFFICULTY_CHECK_MEDIUM,
@@ -76,7 +77,9 @@ module game_cu (
       //SET TIMER FOR GAME OVER
       GAME_OVER_TIMER_SET,
       GAME_OVER_TIMER_DECREASE,
-      GAME_OVER_TIMER_CHECK
+      GAME_OVER_TIMER_CHECK,
+      
+      DEBUGGING
 
     };
   }
@@ -88,7 +91,7 @@ module game_cu (
     to_alufn = 0;
     asel = 0; 
     bsel = 0;
-    regfile_write_address = hf;
+    regfile_write_address = hc; //dun use this register
     regfile_read_address_a = 0;
     regfile_read_address_b = 0;
     regfile_read_address_o =0;
@@ -123,12 +126,13 @@ module game_cu (
           game_fsm.GAME_SET_LEVEL_0:
           alufn_sel=0;
           alufn=6b000000; //add
-          asel=b01;
-          bsel=b000;
-          we=b1;
-          regfile_write_address=h2;
-          regfile_read_address_a=h2;
-          wdsel=b00;
+          asel=b01; //0
+          bsel=b000; // read from port b
+          we=b1; //write enable
+          regfile_read_address_b=h2; // read from port b 
+          regfile_write_address=h2; // level reg
+
+          wdsel=b00; //output from alu
           
           debug_state = 6b000010;
           game_fsm.d=game_fsm.GAME_SET_TIMER_60;
@@ -136,15 +140,20 @@ module game_cu (
           
           game_fsm.GAME_SET_TIMER_60:
           alufn=6b000000; //add
-          asel=0;
-          bsel=0;
-          we=b1;
-          regfile_write_address = h6; // add 60 to timer register
-          wdsel = b10;
+          we=b1; // we  
+          regfile_write_address = h6; // write to countdown timer
+          wdsel = b10; //takes the const 60
           
           debug_state = 6b000011;
           
-          game_fsm.d=game_fsm.GAME_WAIT_FOR_OPERAND1;
+          //game_fsm.d=game_fsm.GAME_WAIT_FOR_OPERAND1;
+          game_fsm.d = game_fsm.DEBUGGING;
+          
+          game_fsm.DEBUGGING:
+          asel = b01; //0
+          bsel = b000;
+          regfile_read_address_b = h6;
+          regfile_read_address_a = regfile_data_in;
           
           
           game_fsm.GAME_WAIT_FOR_OPERAND1:
@@ -156,8 +165,9 @@ module game_cu (
           wdsel=b00;
           
           debug_state = 6b000100;
-          
-          game_fsm.d=game_fsm.GAME_SET_OPERAND1;
+          if(rng_rdy){
+            game_fsm.d=game_fsm.GAME_SET_OPERAND1;
+          }
           
           
           game_fsm.GAME_SET_OPERAND1:
@@ -182,7 +192,10 @@ module game_cu (
           wdsel=b00;
           debug_state = 6b000110;
           
-          game_fsm.d = game_fsm.GAME_SET_OPERAND2;
+          if(rng_rdy){
+              game_fsm.d = game_fsm.GAME_SET_OPERAND2;
+          }
+           
           
           //set operand2
           game_fsm.GAME_SET_OPERAND2:
@@ -221,12 +234,13 @@ module game_cu (
           
           debug_state = 6b001001;
           
-          //game_fsm.d= game_fsm.GAME_MAIN;
+          game_fsm.d= game_fsm.GAME_MAIN;
         
           game_fsm.GAME_MAIN:
         
-          debug_state = 6b001001;
+          debug_state = 6b001010;
         
+          /*
           //ST EASY 
           if(st_easy ==1 ) {
           
@@ -243,17 +257,19 @@ module game_cu (
             game_fsm.d=game_fsm.GAME_DIFFICULTY_CHECK_HARD;
 
           }
+          */
           
           
-          if(st == 1) {
+          if(st == 1 ) {
           game_fsm.d = game_fsm.GAME_TIMER_DECREASE;
           }
           
+          /*
           //if submit button is pressed
           if(button1 ==1 ) {
           game_fsm.d = game_fsm.GAME_ANSWER_CHECK;
           }
-          
+        */
           
           //game answer check state
         game_fsm.GAME_ANSWER_CHECK:
@@ -266,6 +282,8 @@ module game_cu (
           regfile_read_address_b= h8;
           regfile_write_address= hf;
           wdsel=b00;
+          
+          debug_state = 6b001010;
           
           if(button1 == 1 ){
             game_fsm.d = game_fsm.GAME_ANSWER_DECREASE_SCORE;
@@ -285,6 +303,8 @@ module game_cu (
           regfile_write_address = h5;
           wdsel=b00;
           
+          debug_state = 6b001011;
+          
           game_fsm.d = game_fsm.GAME_ANSWER_CHECK_MORE_99;
           
           
@@ -298,6 +318,8 @@ module game_cu (
           regfile_read_address_b = h5;
           regfile_write_address = h5;
           wdsel=b00;
+          
+          debug_state = 6b001100;
           
           game_fsm.d = game_fsm.GAME_ANSWER_CHECK_MORE_99;
           
@@ -314,6 +336,8 @@ module game_cu (
           regfile_write_address = hf;
           wdsel=b00;
           
+          debug_state = 6b001101;
+          
           if( 1 == 1) {
             game_fsm.d = game_fsm.GAME_ANSWER_SHOW_HUAT;
           } else {
@@ -326,6 +350,8 @@ module game_cu (
         
           alufn_sel=0;
           we=b0;
+          
+          debug_state = 6b001011;
           
           game_fsm.d = game_fsm.GAME_MAIN;
           
@@ -417,6 +443,8 @@ module game_cu (
           wdsel=b00;
           decimal_counter_decrease = -1;
           
+          debug_state = 6b111000;
+          
           game_fsm.d=game_fsm.GAME_TIMER_CHECK;
           
           
@@ -424,19 +452,33 @@ module game_cu (
         
           alufn_sel=0;
           alufn= 6b110101;//cmpeq
-          asel = b01;
+          asel = b01; // 0
           bsel = b000;
           we=b1;
           regfile_read_address_b = h6;
-          regfile_write_address = hf;
+          regfile_write_address = hf; //writes the boolean value of cmpeq
           wdsel=b00;
+          debug_state = 6b111001;
           
-          if(1 ==1 ){
-          game_fsm.d = game_fsm.GAME_OVER;
+          //game_fsm.d = game_fsm.GAME_TIMER_BRANCH;
+          
+        game_fsm.GAME_TIMER_BRANCH:
+          regfile_read_address_b = hf; // temp value that contains boolean
+          //whether it was true or false
+          debug_state = 6b010101;
+          if(regfile_data_in == 4h0000 ){
+            game_fsm.d = game_fsm.GAME_OVER;
           } else {
-            game_fsm.d=game_fsm.GAME_MAIN;
-          
+            //game_fsm.d = game_fsm.GAME_MAIN;
           }
+          
+        game_fsm.GAME_OVER:
+          
+          alufn_sel = 0;
+          we =b0;
+          
+          debug_state=6b111111;
+          
           
           
         game_fsm.GAME_DIFFICULTY_CHECK_EASY:

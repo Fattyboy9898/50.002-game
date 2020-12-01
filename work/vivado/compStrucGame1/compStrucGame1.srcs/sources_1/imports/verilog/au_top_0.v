@@ -79,6 +79,9 @@ module au_top_0 (
   wire [6-1:0] M_gameMachine_debug_timer_easy;
   wire [6-1:0] M_gameMachine_debug_timer_medium;
   wire [6-1:0] M_gameMachine_debug_timer_hard;
+  wire [4-1:0] M_gameMachine_debug_ra;
+  wire [4-1:0] M_gameMachine_debug_rb;
+  wire [4-1:0] M_gameMachine_debug_wa;
   reg [1-1:0] M_gameMachine_button1_in;
   reg [1-1:0] M_gameMachine_button2_in;
   game_beta_5 gameMachine (
@@ -93,7 +96,10 @@ module au_top_0 (
     .debug_countdown_timer(M_gameMachine_debug_countdown_timer),
     .debug_timer_easy(M_gameMachine_debug_timer_easy),
     .debug_timer_medium(M_gameMachine_debug_timer_medium),
-    .debug_timer_hard(M_gameMachine_debug_timer_hard)
+    .debug_timer_hard(M_gameMachine_debug_timer_hard),
+    .debug_ra(M_gameMachine_debug_ra),
+    .debug_rb(M_gameMachine_debug_rb),
+    .debug_wa(M_gameMachine_debug_wa)
   );
   wire [7-1:0] M_seg_seg;
   wire [4-1:0] M_seg_sel;
@@ -121,13 +127,10 @@ module au_top_0 (
     M_edge_detector_button2_in = M_btn_cond_2_out;
     M_gameMachine_button1_in = M_edge_detector_button1_out;
     M_gameMachine_button2_in = M_edge_detector_button2_out;
-    io_led[0+7-:8] = M_gameMachine_debug_state;
-    io_led[8+7-:8] = M_gameMachine_debug_timer;
-    io_led[16+7-:8] = M_gameMachine_debug_countdown_timer;
-    io_led[16+1+0-:1] = M_gameMachine_debug_timer_easy;
-    io_led[16+2+0-:1] = M_gameMachine_debug_timer_medium;
-    io_led[16+3+0-:1] = M_gameMachine_debug_timer_hard;
-    M_dec_ctr_inc = M_gameMachine_debug_timer_easy;
+    io_led[0+7-:8] = M_gameMachine_debug_ra;
+    io_led[8+7-:8] = M_gameMachine_debug_rb;
+    io_led[16+7-:8] = M_gameMachine_debug_wa;
+    M_dec_ctr_inc = 4'h8;
     M_dec_ctr_rst = 1'h0;
     M_seg_values = M_dec_ctr_digits;
     io_seg = ~M_seg_seg;

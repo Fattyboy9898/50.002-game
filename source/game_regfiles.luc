@@ -9,7 +9,12 @@ module game_regfiles (
     input data[16],
     output out_a[16], // port a output
     output out_b[16], // port b output
-    output out_o[6] // port o output
+    output out_o[6], // port o output
+    
+    output debug_out_write_address[4],
+    output debug_out_ra[4],
+    output debug_out_rb[4],
+    output debug_out_register[16]
   ) {
   
   .clk(clk){
@@ -35,6 +40,12 @@ module game_regfiles (
   }
 
   always {
+  
+    debug_out_write_address = write_address;
+    debug_out_ra = read_address_a;
+    debug_out_rb = read_address_b;
+    
+    debug_out_register = data;
     //if write enabled look at write address
     if (we) {
       case(write_address){

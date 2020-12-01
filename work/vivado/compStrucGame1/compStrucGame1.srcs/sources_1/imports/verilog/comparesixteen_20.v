@@ -4,29 +4,31 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module shiftersixteen_20 (
-    input [15:0] a,
-    input [3:0] b,
+module comparesixteen_20 (
+    input z,
+    input v,
+    input n,
     input [1:0] alufn,
-    output reg [15:0] shift
+    output reg [15:0] compare
   );
   
   
   
   always @* begin
+    compare[1+14-:15] = 15'h0000;
     
     case (alufn)
-      2'h0: begin
-        shift = a << b;
-      end
       2'h1: begin
-        shift = a >> b;
+        compare[0+0-:1] = z;
+      end
+      2'h2: begin
+        compare[0+0-:1] = n ^ v;
       end
       2'h3: begin
-        shift = $signed(a) >>> b;
+        compare[0+0-:1] = z | (n ^ v);
       end
       default: begin
-        shift = 16'h0000;
+        compare[0+0-:1] = 1'h0;
       end
     endcase
   end
