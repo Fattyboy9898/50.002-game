@@ -137,6 +137,7 @@ OPTRACE "add files" START { }
   add_files -quiet {{C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.runs/synth_1/au_top_0.dcp}}
 OPTRACE "read constraints: implementation" START { }
   read_xdc {{C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/constraint/alchitry.xdc}}
+  read_xdc {{C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/constraint/custom.xdc}}
   read_xdc {{C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/constraint/io.xdc}}
   read_xdc {{C:/Program Files/Alchitry/Alchitry Labs/library/components/au.xdc}}
 OPTRACE "read constraints: implementation" END { }

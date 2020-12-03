@@ -1,7 +1,7 @@
 module game_regfiles (
     input clk,  // clock
     input rst,  // reset
-    input we,
+    input we[1],
     input read_address_a[4], //address port a
     input read_address_b[4], //address port b
     input read_address_o[4], //address port o
@@ -14,7 +14,18 @@ module game_regfiles (
     output debug_out_write_address[4],
     output debug_out_ra[4],
     output debug_out_rb[4],
-    output debug_out_register[16]
+    output debug_out_register[16],
+    
+    output operand1_out[7],
+    output operand2_out[7],
+    output operation_out[2],
+    output countdown_timer_out[6],
+    output score_out[7],
+    output answer_out[13],
+    output moduloAns_out[4],
+    output scoreTimter_out[3],
+    output ledvalue_out[10]
+    
   ) {
   
   .clk(clk){
@@ -38,33 +49,48 @@ module game_regfiles (
       
     }
   }
+  //sig tempDebug[6];
 
   always {
-  
+    out_o = operation_level.q;
+    operand1_out = operand1.q;
+    operand2_out = operand2.q;
+    operation_out = operation_level.q;
+    
+    countdown_timer_out = countdown_timer.q;
+    
+    
+    score_out = score.q;
+    answer_out = expectedAns.q;
+    moduloAns_out = moduloAns.q;
+    scoreTimter_out = score_timer.q;
+    ledvalue_out =ledvalue.q;
+    
     debug_out_write_address = write_address;
     debug_out_ra = read_address_a;
     debug_out_rb = read_address_b;
     
-    debug_out_register = data;
+    debug_out_register = countdown_timer.q;
+    //debug_out_register = tempDebug;
     //if write enabled look at write address
     if (we) {
       case(write_address){
-        h0 : operand1.d = data;
-        h1 : operand2.d = data;
-        h2 : operation_level.d = data;
-        h3 : expectedAns.d = data;
-        h4 : moduloAns.d = data;
-        h5 : score.d = data;
-        h6 : countdown_timer.d = data;
-        h7 : direction.d = data;
-        h8 : ledvalue.d = data;
-        h9 : score_timer.d = data;
-        ha : temp1.d = data;
-        hb : temp2.d = data;
-        hc : temp3.d = data; 
-        hd : temp4.d = data;
-        he : temp5.d = data;
-        hf : temp6.d = data;
+        b0000 : operand1.d = data;
+        b0001 : operand2.d = data;
+        b0010 : operation_level.d = data;
+        b0011 : expectedAns.d = data;
+        b0100 : moduloAns.d = data;
+        b0101 : score.d = data;
+        b0110 : countdown_timer.d = data;
+        b0111 : direction.d = data;
+        b1000 : ledvalue.d = data;
+        b1001 : score_timer.d = data;
+        b1010 : temp1.d = data;
+        b1011 : temp2.d = data;
+        b1100 : temp3.d = data; 
+        b1101 : temp4.d = data;
+        b1110 : temp5.d = data;
+        b1111 : temp6.d = data;
         
       }
     }
@@ -112,27 +138,7 @@ module game_regfiles (
         default : out_b = 0;
     }
     
-    //read port o
-    case(read_address_o){
-        h0 : out_o=operand1.q;
-        h1 : out_o=operand2.q;
-        h2 : out_o=operation_level.q;
-        h3 : out_o=expectedAns.q;
-        h4 : out_o=moduloAns.q;
-        h5 : out_o=score.q;
-        h6 : out_o=countdown_timer.q;
-        h7 : out_o=direction.q;
-        h8 : out_o=ledvalue.q;
-        h9 : out_o=score_timer.q;
-        ha : out_o=temp1.q;
-        hb : out_o=temp2.q;
-        hc : out_o=temp3.q; 
-        hd : out_o=temp4.q;
-        he : out_o=temp5.q;
-        hf : out_o=temp6.q;
-        default : out_o = 0;
-      
-    }
+
     
     
     

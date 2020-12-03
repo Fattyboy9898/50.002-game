@@ -1,0 +1,65 @@
+module led_move (
+    input clk,  // clock
+    input rst,  // reset
+    input led_value[10],    
+    output out
+  ) 
+{
+  
+  ws2812b_writer led_strip(#PIXEL_COUNT(10), .clk(clk), .rst(rst));
+  
+  // Red=h0000FF, Lime=h00FF00, Blue=hFF0000
+  const LEDCOLOR0 = {h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000};
+  const LEDCOLOR1 = {h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, hFF0000};
+  const LEDCOLOR2 = {h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h00FF00, h000000};
+  const LEDCOLOR3 = {h000000, h000000, h000000, h000000, h000000, h000000, h000000, h0000FF, h000000, h000000};
+  const LEDCOLOR4 = {h000000, h000000, h000000, h000000, h000000, h000000, h00FF00, h000000, h000000, h000000};
+  const LEDCOLOR5 = {h000000, h000000, h000000, h000000, h000000, hFF0000, h000000, h000000, h000000, h000000};
+  const LEDCOLOR6 = {h000000, h000000, h000000, h000000, h00FF00, h000000, h000000, h000000, h000000, h000000};
+  const LEDCOLOR7 = {h000000, h000000, h000000, h0000FF, h000000, h000000, h000000, h000000, h000000, h000000};
+  const LEDCOLOR8 = {h000000, h000000, h00FF00, h000000, h000000, h000000, h000000, h000000, h000000, h000000};
+  const LEDCOLOR9 = {h000000, hFF0000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000};
+  const LEDCOLOR10 = {h00FF00, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000};
+
+  always {
+    
+    led_strip.color= 6h0;
+    
+    if (led_value == b0000000000){
+      led_strip.color= LEDCOLOR0[led_strip.pixel]; 
+    }
+    else if (led_value == b0000000001){
+      led_strip.color= LEDCOLOR1[led_strip.pixel]; 
+    }
+    else if (led_value == b0000000010){
+      led_strip.color= LEDCOLOR2[led_strip.pixel]; 
+    }
+    else if (led_value == b0000000100){
+      led_strip.color= LEDCOLOR3[led_strip.pixel]; 
+    }
+    else if (led_value == b0000001000){
+      led_strip.color= LEDCOLOR4[led_strip.pixel]; 
+    }
+    else if (led_value == b0000010000){
+      led_strip.color= LEDCOLOR5[led_strip.pixel]; 
+    }
+    else if (led_value == b0000100000){
+      led_strip.color= LEDCOLOR6[led_strip.pixel]; 
+    }
+    else if (led_value == b0001000000){
+      led_strip.color= LEDCOLOR7[led_strip.pixel]; 
+    }
+    else if (led_value == b0010000000){
+      led_strip.color= LEDCOLOR8[led_strip.pixel]; 
+    }
+    else if (led_value == b0100000000){
+      led_strip.color= LEDCOLOR9[led_strip.pixel]; 
+    }
+    else {
+      led_strip.color= LEDCOLOR10[led_strip.pixel]; 
+    }
+    
+    led_strip.update = 1;
+    out = led_strip.led;
+  
+}

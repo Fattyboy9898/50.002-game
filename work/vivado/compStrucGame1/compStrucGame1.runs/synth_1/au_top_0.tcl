@@ -84,29 +84,38 @@ set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib {
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/alu_9.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/boolesixteen_22.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/button_conditioner_3.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/comparesixteen_20.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_13.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_14.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_15.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_16.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/decimal_counter_8.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/decoder_18.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/edge_detector_2.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/fasixteen_19.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/game_beta_5.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/game_cu_10.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/game_regfiles_11.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/multi_dec_ctr_4.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/multi_seven_seg_6.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/pipeline_7.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/pn_gen_23.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/reset_conditioner_1.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/rngGenerator_12.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/seven_seg_17.v}
-  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/shiftersixteen_21.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/alu_15.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/bin_to_dec_3.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/bin_to_dec_4.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/boolesixteen_31.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/button_conditioner_7.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/comparesixteen_29.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/conversionAnswerLed_1.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_20.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_21.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_22.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_23.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/counter_24.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/decoder_25.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/edge_detector_6.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/fasixteen_28.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/game_beta_9.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/game_cu_16.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/game_regfiles_17.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/led_level_8.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/led_move_11.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/multi_seven_seg_10.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/operator_12.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/pipeline_13.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/pn_gen_32.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/reset_conditioner_5.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/rngGenerator2_19.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/rngGenerator_18.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/seven_seg_2.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/shiftersixteen_30.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/ws2812b_writer_14.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/ws2812b_writer_26.v}
+  {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/ws2812b_writer_27.v}
   {C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/vivado/compStrucGame1/compStrucGame1.srcs/sources_1/imports/verilog/au_top_0.v}
 }
 OPTRACE "Adding files" END { }
@@ -120,6 +129,9 @@ foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
 }
 read_xdc {{C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/constraint/alchitry.xdc}}
 set_property used_in_implementation false [get_files {{C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/constraint/alchitry.xdc}}]
+
+read_xdc {{C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/constraint/custom.xdc}}
+set_property used_in_implementation false [get_files {{C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/constraint/custom.xdc}}]
 
 read_xdc {{C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/constraint/io.xdc}}
 set_property used_in_implementation false [get_files {{C:/Users/user/OneDrive/Term 4/Computation Structures/alchitry/compStrucGame1/work/constraint/io.xdc}}]

@@ -1,0 +1,34 @@
+module operator (
+    input clk,  // clock
+    input rst,  // reset
+    input level[2],    
+    output out
+  ) 
+{
+  
+  ws2812b_writer led_strip(#PIXEL_COUNT(9), .clk(clk), .rst(rst));
+  
+  // Red=h0000FF, Lime=h00FF00, Blue=hFF0000
+  const LEDPLUS = {h000000, hFF0000, h000000, hFF0000, hFF0000, hFF0000, h000000, hFF0000, h000000};
+  const LEDMINUS = {h000000, h000000, h000000, hFF0000, hFF0000, hFF0000, h000000, h000000, h000000};
+  const LEDMULTIPLY = {hFF0000, h000000, hFF0000, h000000, hFF0000, h000000, hFF0000, h000000, hFF0000};
+
+
+  always {
+    
+    led_strip.color= 6h0;
+    
+    if (level == 0){
+      led_strip.color= LEDPLUS[led_strip.pixel]; 
+    }
+    else if (level == 1){
+      led_strip.color= LEDMINUS[led_strip.pixel]; 
+    }
+    else {
+      led_strip.color= LEDMULTIPLY[led_strip.pixel]; 
+    }
+    
+    led_strip.update = 1;
+    out = led_strip.led;
+  
+}

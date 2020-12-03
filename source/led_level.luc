@@ -1,0 +1,37 @@
+module led_level (
+    input clk,  // clock
+    input rst,  // reset
+    input level[2],    
+    output out
+  ) 
+{
+  
+  ws2812b_writer led_strip(#PIXEL_COUNT(13), .clk(clk), .rst(rst));
+  
+  // Red=h0000FF, Lime=h00FF00, Blue=hFF0000
+  const LEDCOLOR0 = {hFF0000, hFF0000, hFF0000, hFF0000, hFF0000, hFF0000,hFF0000, hFF0000,hFF0000, hFF0000, hFF0000,hFF0000, hFF0000};
+  const LEDCOLOR1 = {h00FF00, h00FF00, h00FF00, h00FF00, h00FF00, h00FF00, h00FF00, h00FF00, h00FF00, h00FF00, h00FF00, h00FF00, h00FF00};
+  const LEDCOLOR2 = {h0000FF, h0000FF, h0000FF, h0000FF, h0000FF, h0000FF, h0000FF, h0000FF, h0000FF, h0000FF, h0000FF, h0000FF, h0000FF};
+  const LEDCOLOR3 = {h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000, h000000};
+
+  always {
+    
+    led_strip.color= 6h0;
+    
+    if (level == b00){
+      led_strip.color= LEDCOLOR0[led_strip.pixel]; 
+    }
+    else if (level == b01){
+      led_strip.color= LEDCOLOR1[led_strip.pixel]; 
+    }
+    else if (level == b10){
+      led_strip.color= LEDCOLOR2[led_strip.pixel]; 
+    }
+     else {
+      led_strip.color= LEDCOLOR3[led_strip.pixel]; 
+     }
+      
+    led_strip.update = 1;
+    out = led_strip.led;
+  
+}

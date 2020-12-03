@@ -3,8 +3,18 @@ module game_beta (
     input rst,  // reset
 
     
-    input button1_in,
-    input button2_in,
+    input button1_in[1],
+    input button2_in[1],
+    
+    output operand1[7],
+    output operand2[7],
+    output operation[2],
+    output countdown_timer[6],
+    output score[7],
+    output answer[13],
+    output moduloAns[4],
+    output scoreTimer[3],
+    output ledValue[10],
     
     output decimal_counter_decrease,
     output decimal_counter_rst,
@@ -41,6 +51,9 @@ module game_beta (
     //edge_detector edge_detector_button1(#RISE(#1),#FALL(0));
     //edge_detector edge_detector_button2(#RISE(#1),#FALL(0));
     edge_detector game_timer_detector(#RISE(1),#FALL(0));
+    edge_detector game_easy_detector(#RISE(1),#FALL(0));
+    edge_detector game_medium_detector(#RISE(1),#FALL(0));
+    edge_detector game_hard_detector(#RISE(1),#FALL(0));
     
 
       .rst(rst){
@@ -49,9 +62,10 @@ module game_beta (
         game_regfiles game_regFile;
       
         rngGenerator rngGen;
-        counter easy_timer(#SIZE(1),#DIV(26));
-        counter medium_timer(#SIZE(1),#DIV(25));
-        counter hard_timer(#SIZE(1),#DIV(24));
+        rngGenerator2 rngGen2;
+        counter easy_timer(#SIZE(1),#DIV(25));
+        counter medium_timer(#SIZE(1),#DIV(24));
+        counter hard_timer(#SIZE(1),#DIV(23));
         counter timer(#SIZE(1),#DIV(26));
     }
   }
@@ -66,6 +80,7 @@ module game_beta (
     
     //rngGen
     game_controlUnit.rng_rdy = rngGen.rng_ready;
+    game_controlUnit.rng_rdy2 = rngGen2.rng_ready;
     
     
     //output of cu to increase 7 seven_seg
@@ -77,7 +92,7 @@ module game_beta (
     debug_ra = game_regFile.debug_out_ra;
     debug_rb = game_regFile.debug_out_rb;
     debug_wa = game_regFile.debug_out_write_address;
-    debug_register = game_regFile.;  
+    debug_register = game_regFile.debug_out_register;  
 
     debug_state = game_controlUnit.debug_state;
     debug_timer =  timer.value;
@@ -87,16 +102,15 @@ module game_beta (
     debug_timer_hard = hard_timer.value;
     
     
-    
+    game_easy_detector.in = easy_timer.value;
+    game_medium_detector.in = medium_timer.value;
+    game_hard_detector.in = hard_timer.value;
     game_timer_detector.in = timer.value;
     game_controlUnit.st = game_timer_detector.out;
-    game_controlUnit.st_easy = easy_timer.value;
-    game_controlUnit.st_med = medium_timer.value;
-    game_controlUnit.st_hard = hard_timer.value;
+    game_controlUnit.st_easy = game_easy_detector.out;
+    game_controlUnit.st_med = game_medium_detector.out;
+    game_controlUnit.st_hard = game_hard_detector.out;
     
-    inputAlu_a=0;
-    inputAlu_b=0;
-    to_alufn_out=0;
 
     
     //setup  regfile unit
@@ -115,6 +129,7 @@ module game_beta (
       b01 : inputAlu_a = h0;
       b10 : inputAlu_a = h1;
       b01 : inputAlu_a = h2;
+      default : inputAlu_a=0;
     }
     //bsel mux
     case(game_controlUnit.bsel) {
@@ -125,7 +140,8 @@ module game_beta (
       b100 : inputAlu_b = h200;
       b101 : inputAlu_b = h5;
       b110 : inputAlu_b = h63;
-      b111 : inputAlu_b = h0;
+      b111 : inputAlu_b = h1;
+      default : inputAlu_b = 0;
     }
     
     //alu
@@ -134,26 +150,43 @@ module game_beta (
     game_alu.alufn = game_controlUnit.alufn;
     
     //wdsel
-    case(game_controlUnit.alufn_sel) {
+    case(game_controlUnit.wdsel) {
       b00 : game_regFile.data= game_alu.alu;
-      b01 : game_regFile.data = 0;//rng data 
+      b01 : game_regFile.data = rngGen.out;//rng data 
       b10 : game_regFile.data = h3c;
-      b11 : game_regFile.data = h0;
-      default: game_regFile.data = game_alu.alu;
+      b11 : game_regFile.data = rngGen2.out;
+      default: game_regFile.data = 0;
     }
     
     //to_alufn mux
-    case(game_controlUnit.to_alufn){
-      b00 : game_alu.alufn = 6b000000;
-      b01 : game_alu.alufn = 6b000001;
-      b10 : game_alu.alufn = 6b000010;
-      b11 : game_alu.alufn = game_regFile.out_o;
+    case(game_regFile.out_o){
+      b00 : to_alufn_out = 6b000000;
+      b01 : to_alufn_out = 6b000001;
+      b10 : to_alufn_out = 6b000010;
+      b11 : to_alufn_out = 6b000000;
+      default : to_alufn_out = 0;
+      //default : game_alu.alufn = game_controlUnit.alufn;
     }
     // alufn_sel mux 
     case(game_controlUnit.alufn_sel){
-      b0 : game_alu.alufn = game_controlUnit.alufn;  
+      b0 : game_alu.alufn = game_controlUnit.alufn;
+      b1 : game_alu.alufn = to_alufn_out;
     }
 
+    
+    operand1 = game_regFile.operand1_out;
+    operand2 = game_regFile.operand2_out;
+    operation = game_regFile.operation_out;
+    
+    countdown_timer = game_regFile.countdown_timer_out;
+    
+    score = game_regFile.score_out;
+    answer = game_regFile.answer_out;
+    moduloAns = game_regFile.moduloAns_out;
+    scoreTimer = game_regFile.scoreTimter_out;
+    ledValue = game_regFile.ledvalue_out;
+    
+    
     
   }
 }

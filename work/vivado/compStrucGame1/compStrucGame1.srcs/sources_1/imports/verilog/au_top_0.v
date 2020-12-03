@@ -10,11 +10,15 @@ module au_top_0 (
     output reg [7:0] led,
     input usb_rx,
     output reg usb_tx,
+    output reg outled,
+    output reg opled,
+    output reg led_level,
     output reg [23:0] io_led,
     output reg [7:0] io_seg,
     output reg [3:0] io_sel,
     input [4:0] io_button,
-    input [23:0] io_dip
+    input [23:0] io_dip,
+    output reg [3:0] nixie_a1
   );
   
   
@@ -27,50 +31,120 @@ module au_top_0 (
   
   reg rst;
   
+  reg [7:0] digit;
+  
+  reg [7:0] digit2;
+  
+  reg [3:0] leddigit;
+  
+  wire [4-1:0] M_conversionAnswerLed_out;
+  reg [10-1:0] M_conversionAnswerLed_ledValue;
+  conversionAnswerLed_1 conversionAnswerLed (
+    .ledValue(M_conversionAnswerLed_ledValue),
+    .out(M_conversionAnswerLed_out)
+  );
+  
+  wire [7-1:0] M_seg1_segs;
+  reg [16-1:0] M_seg1_char;
+  seven_seg_2 seg1 (
+    .char(M_seg1_char),
+    .segs(M_seg1_segs)
+  );
+  
+  wire [7-1:0] M_seg3_segs;
+  reg [16-1:0] M_seg3_char;
+  seven_seg_2 seg3 (
+    .char(M_seg3_char),
+    .segs(M_seg3_segs)
+  );
+  
+  wire [7-1:0] M_seg2_segs;
+  reg [16-1:0] M_seg2_char;
+  seven_seg_2 seg2 (
+    .char(M_seg2_char),
+    .segs(M_seg2_segs)
+  );
+  
+  wire [7-1:0] M_seg4_segs;
+  reg [16-1:0] M_seg4_char;
+  seven_seg_2 seg4 (
+    .char(M_seg4_char),
+    .segs(M_seg4_segs)
+  );
+  
+  wire [4-1:0] M_ledBinaryToDecimal_digits;
+  reg [4-1:0] M_ledBinaryToDecimal_value;
+  bin_to_dec_3 ledBinaryToDecimal (
+    .value(M_ledBinaryToDecimal_value),
+    .digits(M_ledBinaryToDecimal_digits)
+  );
+  
+  wire [8-1:0] M_operand1BinaryToDecimal_digits;
+  reg [7-1:0] M_operand1BinaryToDecimal_value;
+  bin_to_dec_4 operand1BinaryToDecimal (
+    .value(M_operand1BinaryToDecimal_value),
+    .digits(M_operand1BinaryToDecimal_digits)
+  );
+  
+  wire [8-1:0] M_operand2BinaryToDecimal_digits;
+  reg [7-1:0] M_operand2BinaryToDecimal_value;
+  bin_to_dec_4 operand2BinaryToDecimal (
+    .value(M_operand2BinaryToDecimal_value),
+    .digits(M_operand2BinaryToDecimal_digits)
+  );
+  
   wire [1-1:0] M_reset_cond_out;
   reg [1-1:0] M_reset_cond_in;
-  reset_conditioner_1 reset_cond (
+  reset_conditioner_5 reset_cond (
     .clk(clk),
     .in(M_reset_cond_in),
     .out(M_reset_cond_out)
   );
   wire [1-1:0] M_edge_detector_button1_out;
   reg [1-1:0] M_edge_detector_button1_in;
-  edge_detector_2 edge_detector_button1 (
+  edge_detector_6 edge_detector_button1 (
     .clk(clk),
     .in(M_edge_detector_button1_in),
     .out(M_edge_detector_button1_out)
   );
   wire [1-1:0] M_edge_detector_button2_out;
   reg [1-1:0] M_edge_detector_button2_in;
-  edge_detector_2 edge_detector_button2 (
+  edge_detector_6 edge_detector_button2 (
     .clk(clk),
     .in(M_edge_detector_button2_in),
     .out(M_edge_detector_button2_out)
   );
   wire [1-1:0] M_btn_cond_1_out;
   reg [1-1:0] M_btn_cond_1_in;
-  button_conditioner_3 btn_cond_1 (
+  button_conditioner_7 btn_cond_1 (
     .clk(clk),
     .in(M_btn_cond_1_in),
     .out(M_btn_cond_1_out)
   );
   wire [1-1:0] M_btn_cond_2_out;
   reg [1-1:0] M_btn_cond_2_in;
-  button_conditioner_3 btn_cond_2 (
+  button_conditioner_7 btn_cond_2 (
     .clk(clk),
     .in(M_btn_cond_2_in),
     .out(M_btn_cond_2_out)
   );
-  wire [16-1:0] M_dec_ctr_digits;
-  reg [1-1:0] M_dec_ctr_rst;
-  reg [1-1:0] M_dec_ctr_inc;
-  multi_dec_ctr_4 dec_ctr (
+  wire [1-1:0] M_ledLvl_out;
+  reg [2-1:0] M_ledLvl_level;
+  led_level_8 ledLvl (
     .clk(clk),
-    .rst(M_dec_ctr_rst),
-    .inc(M_dec_ctr_inc),
-    .digits(M_dec_ctr_digits)
+    .rst(rst),
+    .level(M_ledLvl_level),
+    .out(M_ledLvl_out)
   );
+  wire [7-1:0] M_gameMachine_operand1;
+  wire [7-1:0] M_gameMachine_operand2;
+  wire [2-1:0] M_gameMachine_operation;
+  wire [6-1:0] M_gameMachine_countdown_timer;
+  wire [7-1:0] M_gameMachine_score;
+  wire [13-1:0] M_gameMachine_answer;
+  wire [4-1:0] M_gameMachine_moduloAns;
+  wire [3-1:0] M_gameMachine_scoreTimer;
+  wire [10-1:0] M_gameMachine_ledValue;
   wire [1-1:0] M_gameMachine_decimal_counter_decrease;
   wire [1-1:0] M_gameMachine_decimal_counter_rst;
   wire [6-1:0] M_gameMachine_debug_state;
@@ -82,13 +156,23 @@ module au_top_0 (
   wire [4-1:0] M_gameMachine_debug_ra;
   wire [4-1:0] M_gameMachine_debug_rb;
   wire [4-1:0] M_gameMachine_debug_wa;
+  wire [16-1:0] M_gameMachine_debug_register;
   reg [1-1:0] M_gameMachine_button1_in;
   reg [1-1:0] M_gameMachine_button2_in;
-  game_beta_5 gameMachine (
+  game_beta_9 gameMachine (
     .clk(clk),
     .rst(rst),
     .button1_in(M_gameMachine_button1_in),
     .button2_in(M_gameMachine_button2_in),
+    .operand1(M_gameMachine_operand1),
+    .operand2(M_gameMachine_operand2),
+    .operation(M_gameMachine_operation),
+    .countdown_timer(M_gameMachine_countdown_timer),
+    .score(M_gameMachine_score),
+    .answer(M_gameMachine_answer),
+    .moduloAns(M_gameMachine_moduloAns),
+    .scoreTimer(M_gameMachine_scoreTimer),
+    .ledValue(M_gameMachine_ledValue),
     .decimal_counter_decrease(M_gameMachine_decimal_counter_decrease),
     .decimal_counter_rst(M_gameMachine_decimal_counter_rst),
     .debug_state(M_gameMachine_debug_state),
@@ -99,17 +183,34 @@ module au_top_0 (
     .debug_timer_hard(M_gameMachine_debug_timer_hard),
     .debug_ra(M_gameMachine_debug_ra),
     .debug_rb(M_gameMachine_debug_rb),
-    .debug_wa(M_gameMachine_debug_wa)
+    .debug_wa(M_gameMachine_debug_wa),
+    .debug_register(M_gameMachine_debug_register)
   );
   wire [7-1:0] M_seg_seg;
   wire [4-1:0] M_seg_sel;
   reg [16-1:0] M_seg_values;
-  multi_seven_seg_6 seg (
+  multi_seven_seg_10 seg (
     .clk(clk),
     .rst(rst),
     .values(M_seg_values),
     .seg(M_seg_seg),
     .sel(M_seg_sel)
+  );
+  wire [1-1:0] M_ledMove_out;
+  reg [10-1:0] M_ledMove_led_value;
+  led_move_11 ledMove (
+    .clk(clk),
+    .rst(rst),
+    .led_value(M_ledMove_led_value),
+    .out(M_ledMove_out)
+  );
+  wire [1-1:0] M_op_out;
+  reg [2-1:0] M_op_level;
+  operator_12 op (
+    .clk(clk),
+    .rst(rst),
+    .level(M_op_level),
+    .out(M_op_out)
   );
   
   always @* begin
@@ -121,19 +222,32 @@ module au_top_0 (
     io_seg = ~M_seg_seg;
     io_sel = ~M_seg_sel;
     M_seg_values = 16'h0000;
-    M_btn_cond_1_in = io_button[4+0-:1];
+    M_btn_cond_1_in = io_button[2+0-:1];
     M_btn_cond_2_in = io_button[3+0-:1];
     M_edge_detector_button1_in = M_btn_cond_1_out;
     M_edge_detector_button2_in = M_btn_cond_2_out;
     M_gameMachine_button1_in = M_edge_detector_button1_out;
     M_gameMachine_button2_in = M_edge_detector_button2_out;
-    io_led[0+7-:8] = M_gameMachine_debug_ra;
-    io_led[8+7-:8] = M_gameMachine_debug_rb;
-    io_led[16+7-:8] = M_gameMachine_debug_wa;
-    M_dec_ctr_inc = 4'h8;
-    M_dec_ctr_rst = 1'h0;
-    M_seg_values = M_dec_ctr_digits;
-    io_seg = ~M_seg_seg;
-    io_sel = ~M_seg_sel;
+    M_conversionAnswerLed_ledValue = M_gameMachine_ledValue;
+    M_ledMove_led_value = M_gameMachine_ledValue;
+    M_ledBinaryToDecimal_value = M_conversionAnswerLed_out;
+    M_operand1BinaryToDecimal_value = M_gameMachine_countdown_timer;
+    M_operand2BinaryToDecimal_value = M_gameMachine_score;
+    nixie_a1 = M_gameMachine_operand1[0+3-:4];
+    M_ledLvl_level = M_gameMachine_operation;
+    led_level = M_ledLvl_out;
+    M_op_level = M_gameMachine_operation;
+    opled = M_op_out;
+    outled = M_ledMove_out;
+    digit[0+7-:8] = M_operand1BinaryToDecimal_digits;
+    digit2[0+7-:8] = M_operand2BinaryToDecimal_digits;
+    M_seg1_char = digit[0+3-:4];
+    M_seg2_char = digit[4+3-:4];
+    M_seg3_char = digit2[0+3-:4];
+    M_seg4_char = digit2[4+3-:4];
+    io_led[8+7-:8] = M_seg1_segs;
+    io_led[16+7-:8] = M_seg2_segs;
+    io_led[0+7-:8] = M_seg4_segs;
+    io_seg = M_seg3_segs;
   end
 endmodule

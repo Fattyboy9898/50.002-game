@@ -4,18 +4,41 @@ module au_top (
     output led [8],         // 8 user controllable LEDs
     input usb_rx,           // USB->Serial input
     output usb_tx,           // USB->Serial output
-    
-    
+    output outled,
+    output opled,
+    output led_level,
     output io_led [3][8],   // LEDs on IO Shield  // LEDs on IO Shield, 3 outputs connected to pins 15,16,17 from FPGA (inputs Cin, A, B into Full Adder)
     output io_seg [8],      // 7-segment LEDs on IO Shield
     output io_sel [4],      // Digit select on IO Shield
     input io_button [5],    // 5 buttons on IO Shield up-0,centre-1, bottom-2, left-3, right-4
-    input io_dip [3][8]     // DIP switches on IO Shield
+    input io_dip [3][8],    // DIP switches on IO Shield
+    output nixie_a1[4]
+    //output nixie_a2[4],
+    
+    //output nixie_b1[4],
+    //output nixie_b2[4]
+    
   ) {
   sig a[16];
   sig b[16];
   sig alufn[6];
   sig rst;                  // reset signal
+  sig digit[2][4];
+  sig digit2[2][4];
+  sig leddigit[1][4];
+  conversionAnswerLed conversionAnswerLed;
+  
+  seven_seg seg1;
+  seven_seg seg3;
+  seven_seg seg2;
+  seven_seg seg4;
+  //seven_seg segOperand1;
+  //seven_seg segOperand2;
+  
+  //bin_to_dec binaryToDecimal(#DIGITS(2));
+  bin_to_dec ledBinaryToDecimal(#DIGITS(1));
+  bin_to_dec operand1BinaryToDecimal(#DIGITS(2));
+  bin_to_dec operand2BinaryToDecimal(#DIGITS(2));
   .clk(clk) {
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
@@ -26,11 +49,14 @@ module au_top (
     
     button_conditioner btn_cond_1;
     button_conditioner btn_cond_2;
-    multi_dec_ctr dec_ctr;
+
     
     .rst(rst) {
+      led_level ledLvl; 
       game_beta gameMachine;
       multi_seven_seg seg;
+      led_move ledMove;
+      operator op;
       
     }
   }
@@ -49,7 +75,7 @@ module au_top (
     seg.values = {4h0,4h0,4h0,4h0}; // 4digits default seven seg display
     
     //btn set up
-    btn_cond_1.in = io_button[4];
+    btn_cond_1.in = io_button[2];
     btn_cond_2.in = io_button[3];
     edge_detector_button1.in = btn_cond_1.out;
     edge_detector_button2.in = btn_cond_2.out;
@@ -58,28 +84,66 @@ module au_top (
     gameMachine.button1_in = edge_detector_button1.out;
     gameMachine.button2_in = edge_detector_button2.out;
     
-    
-    
     //DEBUGGING CODE
-    io_led[0] = gameMachine.debug_ra;
-    io_led[1] = gameMachine.debug_rb;
-    io_led[2] = gameMachine.debug_wa;
-    io_led[0] = gameMachine.debug_register;
-    //io_led[0] = gameMachine.debug_state;
+    //io_led[0] = gameMachine.debug_ra;
+    //io_led[1] = gameMachine.debug_rb;
+    //io_led[2] = gameMachine.debug_wa;
+    //io_led[0] = gameMachine.debug_register;
+    //io_led[2] = gameMachine.debug_state;
     //io_led[1] = gameMachine.debug_timer;
     //io_led[2] = gameMachine.debug_countdown_timer;
     //io_led[2][1] = gameMachine.debug_timer_easy;
     //io_led[2][2] = gameMachine.debug_timer_medium;
     //io_led[2][3] = gameMachine.debug_timer_hard;
     
-    //seven seg code
-   
-    dec_ctr.inc = 8; // value of the timer left
-    dec_ctr.rst = 0;
-    seg.values = dec_ctr.digits;
-    io_seg = ~seg.seg;
-    io_sel = ~seg.sel;
 
+    
+    // Seven seg
+      conversionAnswerLed.ledValue = gameMachine.ledValue;
+      
+      ledMove.led_value = gameMachine.ledValue;
+      ledBinaryToDecimal.value = conversionAnswerLed.out;
+      
+    
+    operand1BinaryToDecimal.value= gameMachine.countdown_timer;
+    operand2BinaryToDecimal.value = gameMachine.score;
+    
+    nixie_a1 = gameMachine.operand1[3:0];
+    /*nixie_a2 = gameMachine.operand1[6:4];
+    nixie_b1 = gameMachine.operand2[3:0];
+    nixie_b2 = gameMachine.operand2[6:4];*/
+   
+      //segOperand1.char = 
+    
+      //ledBinaryToDecimal.value
+      //leddigit = ledBinaryToDecimal.digits;
+      //io_led[0] = gameMachine.score;    
+      //digit[0][1:0] = binaryToDecimal.digits;
+      //segCountdown.char = leddigit[0];
+      //seg2.char = leddigit[1];
+      //io_led[1] = segCountdown.segs;
+      //io_led[2] = seg2.segs;
+      //io_led[1] = gameMachine.ledValue;
+     // io_led[2] = gameMachine.moduloAns;
+      ledLvl.level = gameMachine.operation;
+    led_level = ledLvl.out;
+      op.level = gameMachine.operation;
+      opled = op.out;
+      outled = ledMove.out;
+    
+     digit[1:0]= operand1BinaryToDecimal.digits; 
+    digit2[1:0] =operand2BinaryToDecimal.digits;
+    
+    seg1.char = digit[0];
+    seg2.char = digit[1];
+    seg3.char = digit2[0];
+    seg4.char = digit2[1];
+   
+    io_led[1] = seg1.segs;
+    io_led[2] = seg2.segs;
+    io_led[0] = seg4.segs;
+    io_seg = seg3.segs;
+      
         
       
   }

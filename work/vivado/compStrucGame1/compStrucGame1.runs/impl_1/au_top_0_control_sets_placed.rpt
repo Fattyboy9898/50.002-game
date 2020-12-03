@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.1 (win64) Build 2902540 Wed May 27 19:54:49 MDT 2020
-| Date         : Tue Dec  1 17:41:08 2020
+| Date         : Thu Dec  3 08:31:40 2020
 | Host         : SBB running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file au_top_0_control_sets_placed.rpt
 | Design       : au_top_0
@@ -23,11 +23,11 @@ Table of Contents
 +----------------------------------------------------------+-------+
 |                          Status                          | Count |
 +----------------------------------------------------------+-------+
-| Total control sets                                       |     5 |
-|    Minimum number of control sets                        |     5 |
+| Total control sets                                       |    26 |
+|    Minimum number of control sets                        |    26 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |    23 |
+| Unused register locations in slices containing registers |    75 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -39,15 +39,15 @@ Table of Contents
 +--------------------+-------+
 |       Fanout       | Count |
 +--------------------+-------+
-| Total control sets |     5 |
-| >= 0 to < 4        |     1 |
-| >= 4 to < 6        |     2 |
-| >= 6 to < 8        |     0 |
+| Total control sets |    26 |
+| >= 0 to < 4        |     0 |
+| >= 4 to < 6        |     8 |
+| >= 6 to < 8        |     7 |
 | >= 8 to < 10       |     0 |
-| >= 10 to < 12      |     0 |
-| >= 12 to < 14      |     0 |
+| >= 10 to < 12      |     3 |
+| >= 12 to < 14      |     4 |
 | >= 14 to < 16      |     0 |
-| >= 16              |     2 |
+| >= 16              |     4 |
 +--------------------+-------+
 * Control sets can be remapped at either synth_design or opt_design
 
@@ -58,26 +58,47 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |               3 |            2 |
+| No           | No                    | No                     |              10 |            7 |
 | No           | No                    | Yes                    |               0 |            0 |
-| No           | Yes                   | No                     |              22 |           10 |
-| Yes          | No                    | No                     |               0 |            0 |
+| No           | Yes                   | No                     |             130 |           39 |
+| Yes          | No                    | No                     |              61 |           24 |
 | Yes          | No                    | Yes                    |               0 |            0 |
-| Yes          | Yes                   | No                     |              24 |            7 |
+| Yes          | Yes                   | No                     |             364 |          119 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
 4. Detailed Control Set Information
 -----------------------------------
 
-+----------------+-----------------------------------------------------------------+----------------------------+------------------+----------------+--------------+
-|  Clock Signal  |                          Enable Signal                          |      Set/Reset Signal      | Slice Load Count | Bel Load Count | Bels / Slice |
-+----------------+-----------------------------------------------------------------+----------------------------+------------------+----------------+--------------+
-|  clk_IBUF_BUFG |                                                                 |                            |                2 |              3 |         1.50 |
-|  clk_IBUF_BUFG |                                                                 | reset_cond/M_reset_cond_in |                2 |              4 |         2.00 |
-|  clk_IBUF_BUFG | gameMachine/game_controlUnit/FSM_onehot_M_game_fsm_q[3]_i_1_n_0 | reset_cond/Q[0]            |                2 |              4 |         2.00 |
-|  clk_IBUF_BUFG |                                                                 | reset_cond/Q[0]            |                8 |             18 |         2.25 |
-|  clk_IBUF_BUFG | btn_cond_1/sel                                                  | btn_cond_1/sync/clear      |                5 |             20 |         4.00 |
-+----------------+-----------------------------------------------------------------+----------------------------+------------------+----------------+--------------+
++----------------+----------------------------------------------------------------------+---------------------------------------------+------------------+----------------+--------------+
+|  Clock Signal  |                             Enable Signal                            |               Set/Reset Signal              | Slice Load Count | Bel Load Count | Bels / Slice |
++----------------+----------------------------------------------------------------------+---------------------------------------------+------------------+----------------+--------------+
+|  clk_IBUF_BUFG |                                                                      | reset_cond/M_reset_cond_in                  |                2 |              4 |         2.00 |
+|  clk_IBUF_BUFG | ledLvl/led_strip/M_pixel_ctr_q[3]_i_1_n_0                            | reset_cond/Q[0]                             |                2 |              4 |         2.00 |
+|  clk_IBUF_BUFG | ledMove/led_strip/M_pixel_ctr_q[3]_i_1__0_n_0                        | reset_cond/Q[0]                             |                4 |              4 |         1.00 |
+|  clk_IBUF_BUFG | op/led_strip/M_pixel_ctr_q[3]_i_1__1_n_0                             | reset_cond/Q[0]                             |                2 |              4 |         2.00 |
+|  clk_IBUF_BUFG | ledLvl/led_strip/M_bit_ctr_q[4]_i_1_n_0                              | reset_cond/Q[0]                             |                1 |              5 |         5.00 |
+|  clk_IBUF_BUFG | gameMachine/game_controlUnit/FSM_sequential_M_game_fsm_q[4]_i_1_n_0  | reset_cond/Q[0]                             |                5 |              5 |         1.00 |
+|  clk_IBUF_BUFG | ledMove/led_strip/M_bit_ctr_q[4]_i_1__0_n_0                          | reset_cond/Q[0]                             |                2 |              5 |         2.50 |
+|  clk_IBUF_BUFG | op/led_strip/M_bit_ctr_q[4]_i_1__1_n_0                               | reset_cond/Q[0]                             |                1 |              5 |         5.00 |
+|  clk_IBUF_BUFG | gameMachine/game_controlUnit/FSM_sequential_M_game_fsm_q_reg[2]_6[0] | reset_cond/Q[0]                             |                4 |              6 |         1.50 |
+|  clk_IBUF_BUFG | ledLvl/led_strip/M_state_d                                           | reset_cond/Q[0]                             |                2 |              7 |         3.50 |
+|  clk_IBUF_BUFG | gameMachine/game_controlUnit/M_operand2_d                            | reset_cond/Q[0]                             |                5 |              7 |         1.40 |
+|  clk_IBUF_BUFG | gameMachine/game_controlUnit/FSM_sequential_M_game_fsm_q_reg[2]_4[0] | reset_cond/Q[0]                             |                3 |              7 |         2.33 |
+|  clk_IBUF_BUFG | gameMachine/game_controlUnit/FSM_sequential_M_game_fsm_q_reg[4]_2[0] | reset_cond/Q[0]                             |                3 |              7 |         2.33 |
+|  clk_IBUF_BUFG | ledMove/led_strip/M_state_d                                          | reset_cond/Q[0]                             |                2 |              7 |         3.50 |
+|  clk_IBUF_BUFG | op/led_strip/M_state_d                                               | reset_cond/Q[0]                             |                2 |              7 |         3.50 |
+|  clk_IBUF_BUFG |                                                                      |                                             |                7 |             10 |         1.43 |
+|  clk_IBUF_BUFG | gameMachine/game_controlUnit/M_operand1_d                            | reset_cond/Q[0]                             |                6 |             10 |         1.67 |
+|  clk_IBUF_BUFG | gameMachine/game_controlUnit/FSM_sequential_M_game_fsm_q_reg[2]_5[0] | reset_cond/Q[0]                             |                6 |             10 |         1.67 |
+|  clk_IBUF_BUFG | ledLvl/led_strip/M_rst_ctr_q[0]_i_2_n_0                              | ledLvl/led_strip/M_rst_ctr_q[0]_i_1_n_0     |                4 |             13 |         3.25 |
+|  clk_IBUF_BUFG | gameMachine/game_controlUnit/E[0]                                    | reset_cond/Q[0]                             |                8 |             13 |         1.63 |
+|  clk_IBUF_BUFG | ledMove/led_strip/M_rst_ctr_q[0]_i_2__0_n_0                          | ledMove/led_strip/M_rst_ctr_q[0]_i_1__0_n_0 |                4 |             13 |         3.25 |
+|  clk_IBUF_BUFG | op/led_strip/M_rst_ctr_q[0]_i_2__1_n_0                               | op/led_strip/M_rst_ctr_q[0]_i_1__1_n_0      |                4 |             13 |         3.25 |
+|  clk_IBUF_BUFG | btn_cond_1/M_ctr_q_reg[3]_0                                          | btn_cond_1/sync/M_pipe_q_reg[1]_0           |                5 |             20 |         4.00 |
+|  clk_IBUF_BUFG | reset_cond/E[0]                                                      |                                             |               24 |             61 |         2.54 |
+|  clk_IBUF_BUFG |                                                                      | reset_cond/Q[0]                             |               37 |            126 |         3.41 |
+|  clk_IBUF_BUFG | gameMachine/rngGen/slowclock/E[0]                                    | reset_cond/Q[0]                             |               44 |            192 |         4.36 |
++----------------+----------------------------------------------------------------------+---------------------------------------------+------------------+----------------+--------------+
 
 

@@ -1,0 +1,21 @@
+module conversionAnswerLed (
+    input ledValue[10],
+    output out[4]
+  ) {
+
+  always {
+    case(ledValue){
+      b0000000001 : out = 0;
+      b0000000010 : out = 1; 
+      b0000000100 : out = 2; 
+      b0000001000 : out = 3; 
+      b0000010000 : out = 4; 
+      b0000100000 : out = 5; 
+      b0001000000 : out = 6; 
+      b0010000000 : out = 7; 
+      b0100000000 : out = 8; 
+      b1000000000 : out = 9; 
+      default :out= 0;
+    }
+  }
+}
